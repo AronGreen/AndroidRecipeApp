@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="dk.arongk.and1_recipeapp.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_createFragment"
+            app:destination="@id/createFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_currentRecipeFragment"
+            app:destination="@id/currentRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="dk.arongk.and1_recipeapp.fragments.CreateFragment"
+        android:label="fragment_create"
+        tools:layout="@layout/fragment_create" >
+        <action
+            android:id="@+id/action_createFragment_to_currentRecipeFragment"
+            app:destination="@id/currentRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="dk.arongk.and1_recipeapp.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="dk.arongk.and1_recipeapp.fragments.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/search_fragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_currentRecipeFragment"
+            app:destination="@id/currentRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/currentRecipeFragment"
+        android:name="dk.arongk.and1_recipeapp.fragments.CurrentRecipeFragment"
+        android:label="fragment_current_recipe"
+        tools:layout="@layout/fragment_current_recipe" >
+        <action
+            android:id="@+id/action_currentRecipeFragment_to_editRecipeFragment"
+            app:destination="@id/editRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editRecipeFragment"
+        android:name="dk.arongk.and1_recipeapp.fragments.EditRecipeFragment"
+        android:label="fragment_edit_recipe"
+        tools:layout="@layout/fragment_edit_recipe" />
+</navigation>

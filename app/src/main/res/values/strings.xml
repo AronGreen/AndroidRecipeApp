@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">RecipeApp</string>
+    <string name="current_recipe">Current recipe</string>
+    <string name="create">Create</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
