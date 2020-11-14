@@ -10,18 +10,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CreateFragmentViewModel(application: Application) : AndroidViewModel(application) {
-
-    var title: String = ""
-    var workTime: String = ""
-    var totalTime: String = ""
-    var servings: String = ""
-    var description: String = ""
-    var instructions: String = ""
-    var notes: String = ""
-    var imageUrl: String = ""
+    var title : String = ""
+    var workTime : String  = ""
+    var totalTime : String  = ""
+    var servings : String  = ""
+    var description : String  = ""
+    var instructions : String  = ""
+    var notes : String  = ""
+    var imageUri : String  = ""
 
     private val repository: RecipeRepository
-    val createModel: RecipeCreateModel = RecipeCreateModel()
 
     init {
         val recipeDao = RecipeDatabase.getDatabase(application, viewModelScope).recipeDao()
@@ -30,34 +28,18 @@ class CreateFragmentViewModel(application: Application) : AndroidViewModel(appli
         repository = RecipeRepository(recipeDao, ingredientListItemDao)
     }
 
-    /**
-     * Launching a new coroutine to insert the data in a non-blocking way
-     */
-    fun insert(recipe: RecipeCreateModel) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insert(recipe)
+    fun insert() = viewModelScope.launch(Dispatchers.IO) {
+        //TODO: validate inputs
+        repository.insert(
+            RecipeCreateModel().also {
+                it.title = title
+                it.workTime = workTime.toIntOrNull() ?: 0
+                it.totalTime = totalTime.toIntOrNull() ?: 0
+                it.servings = servings.toIntOrNull() ?: 0
+                it.description = description
+                it.instructions = instructions
+                it.notes = notes
+                it.imageUrl = imageUri
+            })
     }
-
-    fun insert(
-        title: String,
-        workTime: String,
-        totalTime: String,
-        servings: String,
-        description: String,
-        instructions: String,
-        notes: String,
-        imageUrl: String
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        val model = RecipeCreateModel()
-        model.title = title
-        model.workTime = workTime.toIntOrNull() ?: 0
-        model.totalTime = totalTime.toIntOrNull() ?: 0
-        model.servings = servings.toIntOrNull() ?: 0
-        model.description = description
-        model.instructions = instructions
-        model.notes = notes
-        model.imageUrl = imageUrl
-
-        repository.insert(model)
-    }
-
 }

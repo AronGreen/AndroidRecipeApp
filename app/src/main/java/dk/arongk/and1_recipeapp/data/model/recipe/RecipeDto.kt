@@ -29,7 +29,6 @@ data class RecipeDto(
     val notes: String,
     @ColumnInfo(name = "image")
     val imageUrl: String,
-
     ) {
     @Ignore
     var ingredients: List<IngredientListItemDto>? = null
