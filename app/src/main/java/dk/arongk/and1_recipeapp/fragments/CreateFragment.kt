@@ -1,13 +1,11 @@
 package dk.arongk.and1_recipeapp.fragments
 
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import dk.arongk.and1_recipeapp.R
@@ -25,9 +23,9 @@ private const val LOG_TAG = "CREATE_FRAGMENT"
  * create an instance of this fragment.
  */
 class CreateFragment : Fragment(), View.OnClickListener {
-    private lateinit var createFragmentViewModel: CreateFragmentViewModel
+    private lateinit var vm: CreateFragmentViewModel
 
-    private lateinit var createButton : Button
+//    private lateinit var createButton : Button
 
     private lateinit var title : TextInputEditText
     private lateinit var workTime : TextInputEditText
@@ -50,50 +48,20 @@ class CreateFragment : Fragment(), View.OnClickListener {
 //            param2 = it.getString(ARG_PARAM2)
 //        }
 
-        createFragmentViewModel = ViewModelProvider(this).get(CreateFragmentViewModel::class.java)
-
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        Log.i(LOG_TAG,"onViewCreated!?")
-        title = view.findViewById(R.id.title)
-        workTime = view.findViewById(R.id.workTime)
-        totalTime = view.findViewById(R.id.totalTime)
-        servings = view.findViewById(R.id.servings)
-        description = view.findViewById(R.id.description)
-        instructions = view.findViewById(R.id.instructions)
-        notes = view.findViewById(R.id.notes)
-        imageUrl = view.findViewById(R.id.imageUrl)
-
-
-        title.setText("yo")
-//        createButton = view.findViewById(R.id.createButton)
-//        createButton.setOnClickListener(View.OnClickListener {
-//            @Override
-//            fun onClick(view : View){
-//                createFragmentViewModel.createModel.title = title.text.toString()
-//                createFragmentViewModel.createModel.workTime = workTime.text.toString().toIntOrNull() ?: 0
-//                createFragmentViewModel.createModel.totalTime = totalTime.text.toString().toIntOrNull() ?:0
-//                createFragmentViewModel.createModel.servings = servings.text.toString().toIntOrNull() ?:0
-//                createFragmentViewModel.createModel.description = description.text.toString()
-//                createFragmentViewModel.createModel.instructions = instructions.text.toString()
-//                createFragmentViewModel.createModel.notes = notes.text.toString()
-//                createFragmentViewModel.createModel.imageUrl = imageUrl.text.toString()
-//                createFragmentViewModel.insert(createFragmentViewModel.createModel)
-//            }
-//        })
+        vm = ViewModelProvider(this).get(CreateFragmentViewModel::class.java)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.i(LOG_TAG,"onCreateView!?")
+        Log.i(LOG_TAG, "onCreateView!?")
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create, container, false)
+        return inflater.inflate(R.layout.fragment_create, container, false).apply {
+            vm = life
+        }
+//        return inflater.inflate(R.layout.fragment_create, container, false)
     }
 
 
@@ -110,7 +78,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             CreateFragment().apply {
-                Log.i(LOG_TAG,"newInstance!?")
+                Log.i(LOG_TAG, "newInstance!?")
 
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
@@ -121,22 +89,22 @@ class CreateFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
 
-        Log.i(LOG_TAG,"click!?")
+        Log.i(LOG_TAG, "click!?")
         when(v!!.id){
             R.id.createButton -> createFun()
         }
     }
 
     fun createFun(){
-        Log.i(LOG_TAG,"create!?")
-        createFragmentViewModel.createModel.title = title.text.toString()
-        createFragmentViewModel.createModel.workTime = workTime.text.toString().toIntOrNull() ?: 0
-        createFragmentViewModel.createModel.totalTime = totalTime.text.toString().toIntOrNull() ?:0
-        createFragmentViewModel.createModel.servings = servings.text.toString().toIntOrNull() ?:0
-        createFragmentViewModel.createModel.description = description.text.toString()
-        createFragmentViewModel.createModel.instructions = instructions.text.toString()
-        createFragmentViewModel.createModel.notes = notes.text.toString()
-        createFragmentViewModel.createModel.imageUrl = imageUrl.text.toString()
-        createFragmentViewModel.insert(createFragmentViewModel.createModel)
+        Log.i(LOG_TAG, "create!?")
+        vm.createModel.title = title.text.toString()
+        vm.createModel.workTime = workTime.text.toString().toIntOrNull() ?: 0
+        vm.createModel.totalTime = totalTime.text.toString().toIntOrNull() ?:0
+        vm.createModel.servings = servings.text.toString().toIntOrNull() ?:0
+        vm.createModel.description = description.text.toString()
+        vm.createModel.instructions = instructions.text.toString()
+        vm.createModel.notes = notes.text.toString()
+        vm.createModel.imageUrl = imageUrl.text.toString()
+        vm.insert(vm.createModel)
     }
 }

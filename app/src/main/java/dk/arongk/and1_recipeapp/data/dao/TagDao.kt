@@ -22,6 +22,6 @@ interface TagDao {
     @Delete
     suspend fun delete(tag: TagDto)
 
-    @Query("SELECT * FROM tags WHERE value = :value")
-    fun deleteByValue(value: String) : Long
+    @Query("DELETE FROM tags WHERE value = :value")
+    suspend fun deleteByValue(value: String)
 }

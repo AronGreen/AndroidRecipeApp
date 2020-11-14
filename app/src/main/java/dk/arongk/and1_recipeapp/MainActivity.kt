@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.findFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.room.Room
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 //        AppBarConfiguration(navController.graph, findViewById(R.id.bottom_navigation))
 //    }
     lateinit var db: RecipeDatabase
+
+    lateinit var createFragmentViewModel: CreateFragmentViewModel
 
     lateinit var createFragment : CreateFragment
 
@@ -38,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         ).build()
 
 
+
+        createFragmentViewModel = ViewModelProvider(this).get(CreateFragmentViewModel::class.java)
     }
 
     fun onClickBtn(view: View) {

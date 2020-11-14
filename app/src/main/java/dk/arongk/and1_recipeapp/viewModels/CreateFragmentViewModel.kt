@@ -11,13 +11,22 @@ import kotlinx.coroutines.launch
 
 class CreateFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
+    var title: String = ""
+    var workTime: String = ""
+    var totalTime: String = ""
+    var servings: String = ""
+    var description: String = ""
+    var instructions: String = ""
+    var notes: String = ""
+    var imageUrl: String = ""
 
     private val repository: RecipeRepository
-    val createModel : RecipeCreateModel = RecipeCreateModel()
+    val createModel: RecipeCreateModel = RecipeCreateModel()
 
     init {
         val recipeDao = RecipeDatabase.getDatabase(application, viewModelScope).recipeDao()
-        val ingredientListItemDao = RecipeDatabase.getDatabase(application, viewModelScope).ingredientListItemDao()
+        val ingredientListItemDao =
+            RecipeDatabase.getDatabase(application, viewModelScope).ingredientListItemDao()
         repository = RecipeRepository(recipeDao, ingredientListItemDao)
     }
 
@@ -29,14 +38,14 @@ class CreateFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun insert(
-        title : String,
-        workTime : String,
-        totalTime : String,
-        servings : String,
-        description : String,
-        instructions : String,
-        notes : String,
-        imageUrl : String
+        title: String,
+        workTime: String,
+        totalTime: String,
+        servings: String,
+        description: String,
+        instructions: String,
+        notes: String,
+        imageUrl: String
     ) = viewModelScope.launch(Dispatchers.IO) {
         val model = RecipeCreateModel()
         model.title = title
