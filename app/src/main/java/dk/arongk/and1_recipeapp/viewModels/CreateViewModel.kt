@@ -9,7 +9,7 @@ import dk.arongk.and1_recipeapp.data.repositories.RecipeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CreateFragmentViewModel(application: Application) : AndroidViewModel(application) {
+class CreateViewModel(application: Application) : AndroidViewModel(application) {
     var title : String = ""
     var workTime : String  = ""
     var totalTime : String  = ""

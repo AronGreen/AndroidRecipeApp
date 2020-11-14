@@ -1,7 +1,7 @@
 package dk.arongk.and1_recipeapp.data.model.recipe
 
-import dk.arongk.and1_recipeapp.data.model.IngredientListItemDto
-import dk.arongk.and1_recipeapp.data.model.TagDto
+import dk.arongk.and1_recipeapp.data.model.ingredientListItem.IngredientListItemDto
+import dk.arongk.and1_recipeapp.data.model.tag.TagDto
 import java.util.*
 
 class RecipeCreateModel {

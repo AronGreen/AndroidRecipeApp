@@ -11,9 +11,9 @@ import dk.arongk.and1_recipeapp.data.dao.IngredientListItemDao
 import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
 import dk.arongk.and1_recipeapp.data.dao.RecipeDao
 import dk.arongk.and1_recipeapp.data.dao.TagDao
-import dk.arongk.and1_recipeapp.data.model.IngredientDto
-import dk.arongk.and1_recipeapp.data.model.IngredientListItemDto
-import dk.arongk.and1_recipeapp.data.model.TagDto
+import dk.arongk.and1_recipeapp.data.model.ingredient.IngredientDto
+import dk.arongk.and1_recipeapp.data.model.ingredientListItem.IngredientListItemDto
+import dk.arongk.and1_recipeapp.data.model.tag.TagDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*

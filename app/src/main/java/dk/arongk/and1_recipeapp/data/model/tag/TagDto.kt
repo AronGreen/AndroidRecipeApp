@@ -1,4 +1,4 @@
-package dk.arongk.and1_recipeapp.data.model
+package dk.arongk.and1_recipeapp.data.model.tag
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

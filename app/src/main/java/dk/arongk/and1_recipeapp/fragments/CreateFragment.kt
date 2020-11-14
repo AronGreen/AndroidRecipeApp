@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import dk.arongk.and1_recipeapp.R
-import dk.arongk.and1_recipeapp.viewModels.CreateFragmentViewModel
+import dk.arongk.and1_recipeapp.viewModels.CreateViewModel
 
 
 class CreateFragment : Fragment(), View.OnClickListener {
@@ -29,7 +29,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
     private val IMAGE_PICK_PERMISSION_REQUEST_CODE = 1001;
 
     // VARIABLES
-    private lateinit var vm: CreateFragmentViewModel
+    private lateinit var vm: CreateViewModel
     private lateinit var imageUri : String
 
     // WIDGETS
@@ -49,7 +49,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        vm = ViewModelProvider(requireActivity()).get(CreateFragmentViewModel::class.java)
+        vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_create, container, false)
 
         initializeWidgets(view)

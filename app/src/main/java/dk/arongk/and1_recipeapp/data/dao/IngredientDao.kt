@@ -2,7 +2,7 @@ package dk.arongk.and1_recipeapp.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import dk.arongk.and1_recipeapp.data.model.IngredientDto
+import dk.arongk.and1_recipeapp.data.model.ingredient.IngredientDto
 
 @Dao
 interface IngredientDao {

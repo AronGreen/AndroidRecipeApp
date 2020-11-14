@@ -1,7 +1,7 @@
 package dk.arongk.and1_recipeapp.data.dao
 
 import androidx.room.*
-import dk.arongk.and1_recipeapp.data.model.IngredientListItemDto
+import dk.arongk.and1_recipeapp.data.model.ingredientListItem.IngredientListItemDto
 import java.util.*
 
 @Dao
