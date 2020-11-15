@@ -13,6 +13,7 @@ import dk.arongk.and1_recipeapp.data.dao.RecipeDao
 import dk.arongk.and1_recipeapp.data.dao.TagDao
 import dk.arongk.and1_recipeapp.data.model.ingredient.IngredientDto
 import dk.arongk.and1_recipeapp.data.model.ingredientListItem.IngredientListItemDto
+import dk.arongk.and1_recipeapp.data.model.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.data.model.tag.TagDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,14 +39,25 @@ abstract class RecipeDatabase : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.tagDao())
+//                    populateDatabase(database.tagDao(), database.recipeDao())
                 }
             }
         }
 
-        suspend fun populateDatabase(tagDao: TagDao) {
+        suspend fun populateDatabase(tagDao: TagDao, recipeDao: RecipeDao) {
             tagDao.deleteByValue("test")
             tagDao.insert(TagDto(UUID.randomUUID(),"test"))
+
+            val createRecipeModel = RecipeCreateModel().also {
+                it.title = "Mashed potatoes"
+                it.description = "A great recipe"
+                it.workTime = 20
+                it.totalTime = 40
+                it.servings = 2
+            }
+            recipeDao.insert(createRecipeModel.toDto(UUID.randomUUID()))
+            createRecipeModel.title = "Mirror eggs"
+            recipeDao.insert(createRecipeModel.toDto(UUID.randomUUID()))
         }
     }
 

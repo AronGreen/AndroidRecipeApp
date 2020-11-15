@@ -12,21 +12,18 @@ class RecipeRepository(
     private val ingredientListItemDao: IngredientListItemDao
 ) {
 
-//    suspend fun create(recipe: CreateRecipeModel): UUID {
-//        val newId = UUID.randomUUID()
-//        recipeDao.insert(recipe.toDto(newId))
-//        return newId
-//    }
-
     suspend fun get(id: UUID): RecipeDto {
         return recipeDao.get(id)
     }
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    suspend fun getAll(): LiveData<List<RecipeDto>> {
+    fun getAll(): LiveData<List<RecipeDto>> {
         return recipeDao.getAll()
     }
+
+    val allRecipes : LiveData<List<RecipeDto>> = recipeDao.getAll()
+
 
     //TODO: use updateRecipeModel
     suspend fun update(recipeDto: RecipeDto) {

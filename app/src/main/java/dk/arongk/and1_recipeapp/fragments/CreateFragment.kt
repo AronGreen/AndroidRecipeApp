@@ -49,8 +49,9 @@ class CreateFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_create, container, false)
+
+        vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java)
 
         initializeWidgets(view)
 

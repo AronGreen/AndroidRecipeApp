@@ -40,7 +40,7 @@
         android:id="@+id/searchFragment"
         android:name="dk.arongk.and1_recipeapp.fragments.SearchFragment"
         android:label="search_fragment"
-        tools:layout="@layout/search_fragment" >
+        tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragment_to_currentRecipeFragment"
             app:destination="@id/currentRecipeFragment" />
