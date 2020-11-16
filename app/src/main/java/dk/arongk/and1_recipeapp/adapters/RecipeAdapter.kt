@@ -1,5 +1,6 @@
 package dk.arongk.and1_recipeapp.adapters
 
+import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -8,23 +9,31 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dk.arongk.and1_recipeapp.R
+import dk.arongk.and1_recipeapp.data.model.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
+import java.util.*
 
-class RecipeAdapter(var recipes : List<RecipeDto>) : RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
+class RecipeAdapter(context: Context) : RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
+
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private var recipes : List<RecipeDto>
+
+    init {
+        recipes = listOf<RecipeDto>()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.fragment_search_list_item, parent, false)
-        return ViewHolder(view  )
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.image.setImageURI(Uri.parse(recipes.get(position).imageUrl))
-        holder.title.setText(recipes.get(position).title)
-        holder.workTime.setText(recipes.get(position).workTime)
-        holder.totalTime.setText(recipes.get(position).totalTime)
-        holder.servings.setText(recipes.get(position).servings)
-        holder.description.setText(recipes.get(position).description)
+        holder.title.text = recipes.get(position).title
+        holder.workTime.text = recipes.get(position).workTime.toString()
+        holder.totalTime.text = recipes.get(position).totalTime.toString()
+        holder.servings.text = recipes.get(position).servings.toString()
+        holder.description.text = recipes.get(position).description
     }
 
     override fun getItemCount() = recipes.size

@@ -31,25 +31,30 @@ class SearchFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
+        // TODO: this?
         vm = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
-        initializeWidgets(view)
-        val adapter = RecipeAdapter(vm.recipes.value ?: emptyList())
+
+        initializeWidgets(view, vm)
+
+        return view;
+    }
+
+
+    private fun initializeWidgets(view: View, vm : SearchViewModel) {
+        recyclerView = view.findViewById(R.id.search_recyclerView)
+
+        val adapter = RecipeAdapter(requireContext())
         recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         vm.recipes.observe(requireActivity(), Observer {recipes ->
             // Update the cached copy of the words in the adapter.
             recipes?.let { adapter.setData(it) }
         })
 
-        return view;
-    }
+        vm.updateRecipes()
 
-
-    private fun initializeWidgets(view: View) {
-        recyclerView = view.findViewById(R.id.search_recyclerView)
         recyclerView.hasFixedSize()
-        recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
-        recyclerView.visibility = View.INVISIBLE
     }
 
 }

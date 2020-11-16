@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: RecipeRepository
-    val recipes: LiveData<List<RecipeDto>>
+    var recipes: LiveData<List<RecipeDto>>
 
     init {
         val recipeDao = RecipeDatabase.getDatabase(application, viewModelScope).recipeDao()
@@ -25,6 +25,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             RecipeDatabase.getDatabase(application, viewModelScope).ingredientListItemDao()
         repository = RecipeRepository(recipeDao, ingredientListItemDao)
 
+        recipes = repository.allRecipes
+    }
+
+    fun updateRecipes(){
         recipes = repository.allRecipes
     }
 }
