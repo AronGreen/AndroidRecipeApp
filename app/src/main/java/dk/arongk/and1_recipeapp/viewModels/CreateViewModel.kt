@@ -10,14 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CreateViewModel(application: Application) : AndroidViewModel(application) {
-    var title : String = ""
-    var workTime : String  = ""
-    var totalTime : String  = ""
-    var servings : String  = ""
-    var description : String  = ""
-    var instructions : String  = ""
-    var notes : String  = ""
-    var imageUri : String  = ""
+    var title: String = ""
+    var workTime: String = ""
+    var totalTime: String = ""
+    var servings: String = ""
+    var description: String = ""
+    var instructions: String = ""
+    var notes: String = ""
+    var imageUri: String = ""
 
     private val repository: RecipeRepository
 
@@ -28,18 +28,42 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
         repository = RecipeRepository(recipeDao, ingredientListItemDao)
     }
 
-    fun insert() = viewModelScope.launch(Dispatchers.IO) {
+//    fun insert() = viewModelScope.launch(Dispatchers.IO) {
+//        //TODO: validate inputs
+//        val model = RecipeCreateModel()
+//        model.title = title
+//        model.workTime = workTime.toIntOrNull() ?: 0
+//        model.totalTime = totalTime.toIntOrNull() ?: 0
+//        model.servings = servings.toIntOrNull() ?: 0
+//        model.description = description
+//        model.instructions = instructions
+//        model.notes = notes
+//        model.imageUrl = imageUri
+//
+//        repository.insert(model)
+//    }
+
+    fun insert(
+        title: String,
+        workTime: Int,
+        totalTime: Int,
+        servings: Int,
+        description: String,
+        instructions: String,
+        notes: String,
+        imageUrl: String
+    ) = viewModelScope.launch(Dispatchers.IO) {
         //TODO: validate inputs
-        repository.insert(
-            RecipeCreateModel().also {
-                it.title = title
-                it.workTime = workTime.toIntOrNull() ?: 0
-                it.totalTime = totalTime.toIntOrNull() ?: 0
-                it.servings = servings.toIntOrNull() ?: 0
-                it.description = description
-                it.instructions = instructions
-                it.notes = notes
-                it.imageUrl = imageUri
-            })
+        val model = RecipeCreateModel()
+        model.title = title
+        model.workTime = workTime
+        model.totalTime = totalTime
+        model.servings = servings
+        model.description = description
+        model.instructions = instructions
+        model.notes = notes
+        model.imageUrl = imageUrl
+
+        repository.insert(model)
     }
 }

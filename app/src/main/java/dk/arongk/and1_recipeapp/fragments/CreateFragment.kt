@@ -51,7 +51,8 @@ class CreateFragment : Fragment(), View.OnClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_create, container, false)
 
-        vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java)
+//        vm = ViewModelProvider(this).get(CreateViewModel::class.java) // looses data on navigation
+        vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java) // persists data on navigation (attaches to parent activity)
 
         initializeWidgets(view)
 
@@ -61,6 +62,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        Toast.makeText(v?.context, "Clicked a button", Toast.LENGTH_LONG).show()
         when (v?.id) {
             R.id.createButton -> createRecipe()
             R.id.addImageButton -> pickImage(v)
@@ -69,12 +71,12 @@ class CreateFragment : Fragment(), View.OnClickListener {
 
     override fun onPause() {
         super.onPause()
-        saveData()
+        saveToViewModel()
     }
 
     override fun onResume() {
         super.onResume()
-        restoreData()
+        restoreFromViewModel()
     }
 
     //TODO: allow to take new photo as well
@@ -124,9 +126,18 @@ class CreateFragment : Fragment(), View.OnClickListener {
 
     private fun createRecipe() {
         Log.i(LOG_TAG, "create recipe: " + title.text.toString())
-        saveData()
-        vm.insert()
-        clearData()
+        saveToViewModel()
+        vm.insert(
+           vm.title,
+           vm.workTime.toIntOrNull() ?: 0,
+           vm.totalTime.toIntOrNull() ?: 0,
+           vm.servings.toIntOrNull() ?: 0,
+           vm.description,
+           vm.instructions,
+           vm.notes,
+           vm.imageUri
+        )
+        clearViewModel()
     }
 
     private fun pickImage(v: View) {
@@ -157,7 +168,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         startActivityForResult(intent, IMAGE_PICK_ACTIVITY_REQUEST_CODE)
     }
 
-    private fun saveData() {
+    private fun saveToViewModel() {
         vm.title = title.text.toString()
         vm.workTime = workTime.text.toString()
         vm.totalTime = totalTime.text.toString()
@@ -168,7 +179,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.imageUri = imageUri
     }
 
-    private fun restoreData() {
+    private fun restoreFromViewModel() {
         title.setText(vm.title)
         workTime.setText(vm.workTime)
         totalTime.setText(vm.totalTime)
@@ -180,7 +191,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         imageUri = vm.imageUri
     }
 
-    private fun clearData() {
+    private fun clearViewModel() {
         vm.title = ""
         vm.workTime = ""
         vm.totalTime = ""
@@ -189,7 +200,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.instructions = ""
         vm.notes = ""
         vm.imageUri = ""
-        restoreData()
+        restoreFromViewModel()
     }
 
 }

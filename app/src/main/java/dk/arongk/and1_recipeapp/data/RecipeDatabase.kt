@@ -39,7 +39,7 @@ abstract class RecipeDatabase : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-//                    populateDatabase(database.tagDao(), database.recipeDao())
+                    populateDatabase(database.tagDao(), database.recipeDao())
                 }
             }
         }
