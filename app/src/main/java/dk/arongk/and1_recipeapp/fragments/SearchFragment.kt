@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +14,7 @@ import dk.arongk.and1_recipeapp.R
 import dk.arongk.and1_recipeapp.adapters.RecipeAdapter
 import dk.arongk.and1_recipeapp.viewModels.SearchViewModel
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), RecipeAdapter.OnListItemClickListener {
 
     // CONSTANTS
     private val LOG_TAG = "SEARCH_FRAGMENT"
@@ -43,7 +44,7 @@ class SearchFragment : Fragment() {
     private fun initializeWidgets(view: View, vm : SearchViewModel) {
         recyclerView = view.findViewById(R.id.search_recyclerView)
 
-        val adapter = RecipeAdapter(requireContext())
+        val adapter = RecipeAdapter(requireContext(), this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -55,6 +56,10 @@ class SearchFragment : Fragment() {
         vm.updateRecipes()
 
         recyclerView.hasFixedSize()
+    }
+
+    override fun onListItemClick(clickedItemIndex: Int) {
+        Toast.makeText(requireContext(), "Clicked Number: $clickedItemIndex", Toast.LENGTH_SHORT).show();
     }
 
 }

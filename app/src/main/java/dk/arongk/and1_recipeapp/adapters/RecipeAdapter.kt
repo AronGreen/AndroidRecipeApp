@@ -9,11 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dk.arongk.and1_recipeapp.R
-import dk.arongk.and1_recipeapp.data.model.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
-import java.util.*
 
-class RecipeAdapter(context: Context) : RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
+
+class RecipeAdapter(
+    context: Context,
+    private val mOnListItemClickListener: OnListItemClickListener
+) : RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var recipes : List<RecipeDto>
@@ -38,18 +40,28 @@ class RecipeAdapter(context: Context) : RecyclerView.Adapter<RecipeAdapter.ViewH
 
     override fun getItemCount() = recipes.size
 
-    fun setData(newData : List<RecipeDto>){
+    fun setData(newData: List<RecipeDto>){
         recipes = newData
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        init {
+            itemView.setOnClickListener(this)
+        }
        var image : ImageView = itemView.findViewById(R.id.sli_image)
        var title : TextView = itemView.findViewById(R.id.sli_title)
        var workTime : TextView = itemView.findViewById(R.id.sli_workTime)
        var totalTime : TextView= itemView.findViewById(R.id.sli_totalTime)
        var servings : TextView= itemView.findViewById(R.id.sli_servings)
        var description : TextView= itemView.findViewById(R.id.sli_description)
+
+        override fun onClick(v: View?) {
+            mOnListItemClickListener.onListItemClick(adapterPosition)
+        }
     }
 
+    interface OnListItemClickListener{
+        fun onListItemClick(clickedItemIndex: Int)
+    }
 }

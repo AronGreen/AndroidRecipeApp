@@ -1,12 +1,18 @@
 package dk.arongk.and1_recipeapp.fragments
 
-import android.Manifest
+import android.Manifest.permission.CAMERA
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,22 +21,28 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.ContextCompat.getExternalFilesDirs
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import dk.arongk.and1_recipeapp.R
 import dk.arongk.and1_recipeapp.viewModels.CreateViewModel
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
-
+// some code adapted from:
+// https://devofandroid.blogspot.com/2018/09/pick-image-from-gallery-android-studio_15.html
+// http://www.kotlincodes.com/kotlin/camera-intent-with-kotlin-android/
 class CreateFragment : Fragment(), View.OnClickListener {
-    // CONSTANTS
-    private val LOG_TAG = "CREATE_FRAGMENT"
-    private val IMAGE_PICK_ACTIVITY_REQUEST_CODE = 1000;
-    private val IMAGE_PICK_PERMISSION_REQUEST_CODE = 1001;
 
-    // VARIABLES
+
+    // PROPS
     private lateinit var vm: CreateViewModel
-    private lateinit var imageUri : String
+    private lateinit var imageUri: String
+    private lateinit var currentPhotoPath: String
 
     // WIDGETS
     private lateinit var title: TextInputEditText
@@ -51,8 +63,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_create, container, false)
 
-//        vm = ViewModelProvider(this).get(CreateViewModel::class.java) // looses data on navigation
-        vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java) // persists data on navigation (attaches to parent activity)
+        vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java)
 
         initializeWidgets(view)
 
@@ -65,9 +76,13 @@ class CreateFragment : Fragment(), View.OnClickListener {
         Toast.makeText(v?.context, "Clicked a button", Toast.LENGTH_LONG).show()
         when (v?.id) {
             R.id.createButton -> createRecipe()
-            R.id.addImageButton -> pickImage(v)
+            R.id.addImageButton -> initTakePicture()
         }
     }
+
+    private fun initTakePicture() =
+        if (checkPermission()) takePicture() else requestPermission()
+
 
     override fun onPause() {
         super.onPause()
@@ -80,31 +95,87 @@ class CreateFragment : Fragment(), View.OnClickListener {
     }
 
     //TODO: allow to take new photo as well
-    // image picker logic adapted from:
-    // https://devofandroid.blogspot.com/2018/09/pick-image-from-gallery-android-studio_15.html
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+//        when (requestCode) {
+//            PERMISSION_REQUEST_CODE -> {
+//                if (grantResults.isNotEmpty() &&
+//                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+//                ) {
+//                    pickImageFromGallery()
+//                } else {
+//                    Toast.makeText(this.context, "Permission denied", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
+
         when (requestCode) {
-            IMAGE_PICK_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+            PERMISSION_REQUEST_CODE -> {
+
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
                 ) {
-                    pickImageFromGallery()
+
+                    takePicture()
+
+                    // TODO: or pick image from gallery
+
                 } else {
-                    Toast.makeText(this.context, "Permission denied", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Permission Denied", Toast.LENGTH_SHORT).show()
                 }
+                return
             }
+
+//            else -> {
+//
+//            }
         }
     }
 
+
+    @Throws(IOException::class)
+    private fun createFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+//            getExternalFilesDirs(requireContext(), Environment.DIRECTORY_PICTURES).first()
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+
+
+
+    private fun takePicture() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val file: File = createFile()
+
+        val uri: Uri = FileProvider.getUriForFile(
+            requireContext(),
+            "dk.arongk.and1_recipeapp.FileProvider",
+            file
+        )
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_ACTIVITY_REQUEST_CODE) {
-            recipeImage.setImageURI(data?.data)
-            imageUri = data?.data.toString()
-            vm.imageUri = imageUri
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            //To get the File for further usage
+            val auxFile = File(currentPhotoPath)
+
+            val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
+            recipeImage.setImageBitmap(bitmap)
+            vm.imageUri = currentPhotoPath
         }
     }
 
@@ -128,37 +199,48 @@ class CreateFragment : Fragment(), View.OnClickListener {
         Log.i(LOG_TAG, "create recipe: " + title.text.toString())
         saveToViewModel()
         vm.insert(
-           vm.title,
-           vm.workTime.toIntOrNull() ?: 0,
-           vm.totalTime.toIntOrNull() ?: 0,
-           vm.servings.toIntOrNull() ?: 0,
-           vm.description,
-           vm.instructions,
-           vm.notes,
-           vm.imageUri
+            vm.title,
+            vm.workTime.toIntOrNull() ?: 0,
+            vm.totalTime.toIntOrNull() ?: 0,
+            vm.servings.toIntOrNull() ?: 0,
+            vm.description,
+            vm.instructions,
+            vm.notes,
+            vm.imageUri
         )
         clearViewModel()
     }
 
-    private fun pickImage(v: View) {
-        Toast.makeText(v.context, "Clicked on Image", Toast.LENGTH_LONG).show()
-        //check runtime permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(
-                    this.requireContext(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_DENIED
-            ) {
-                val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE);
-                requestPermissions(permissions, IMAGE_PICK_PERMISSION_REQUEST_CODE);
-            } else {
-                pickImageFromGallery();
-            }
-        } else {
-            //system OS is < Marshmallow
-            pickImageFromGallery();
-        }
+//    private fun pickImage(v: View) {
+//        Toast.makeText(v.context, "Clicked on Image", Toast.LENGTH_LONG).show()
+//        //check runtime permission
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if (!checkPermission()) {
+//                requestPermission()
+//            } else {
+//                pickImageFromGallery()
+//            }
+//        } else {
+//            //system OS is < Marshmallow
+//            pickImageFromGallery()
+//        }
+//
+//    }
 
+    private fun checkPermission(): Boolean {
+        return (
+                checkSelfPermission(requireContext(), CAMERA)
+                        == PackageManager.PERMISSION_GRANTED
+                        &&
+                        checkSelfPermission(requireContext(), READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED)
+    }
+
+    private fun requestPermission() {
+        requestPermissions(
+            arrayOf(READ_EXTERNAL_STORAGE, CAMERA),
+            PERMISSION_REQUEST_CODE
+        )
     }
 
     private fun pickImageFromGallery() {
@@ -203,4 +285,10 @@ class CreateFragment : Fragment(), View.OnClickListener {
         restoreFromViewModel()
     }
 
+    companion object {
+        private const val LOG_TAG = "CREATE_FRAGMENT"
+        private const val IMAGE_PICK_ACTIVITY_REQUEST_CODE = 1
+        private const val PERMISSION_REQUEST_CODE = 2
+        private const val REQUEST_IMAGE_CAPTURE = 3
+    }
 }
