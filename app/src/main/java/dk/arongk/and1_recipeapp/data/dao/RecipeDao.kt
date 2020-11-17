@@ -15,7 +15,7 @@ interface RecipeDao {
     fun getAll(): LiveData<List<RecipeDto>>
 
     @Query("SELECT * FROM recipes WHERE id = :id")
-    suspend fun get(id: UUID): RecipeDto
+    fun get(id: UUID): LiveData<RecipeDto>
 
     @Update
     suspend fun update(recipe: RecipeDto)

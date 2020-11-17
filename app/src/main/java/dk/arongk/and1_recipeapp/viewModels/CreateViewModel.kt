@@ -28,21 +28,6 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
         repository = RecipeRepository(recipeDao, ingredientListItemDao)
     }
 
-//    fun insert() = viewModelScope.launch(Dispatchers.IO) {
-//        //TODO: validate inputs
-//        val model = RecipeCreateModel()
-//        model.title = title
-//        model.workTime = workTime.toIntOrNull() ?: 0
-//        model.totalTime = totalTime.toIntOrNull() ?: 0
-//        model.servings = servings.toIntOrNull() ?: 0
-//        model.description = description
-//        model.instructions = instructions
-//        model.notes = notes
-//        model.imageUrl = imageUri
-//
-//        repository.insert(model)
-//    }
-
     fun insert(
         title: String,
         workTime: Int,

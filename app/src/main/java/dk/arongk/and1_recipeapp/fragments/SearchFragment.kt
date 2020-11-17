@@ -1,13 +1,17 @@
 package dk.arongk.and1_recipeapp.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dk.arongk.and1_recipeapp.R
@@ -16,10 +20,7 @@ import dk.arongk.and1_recipeapp.viewModels.SearchViewModel
 
 class SearchFragment : Fragment(), RecipeAdapter.OnListItemClickListener {
 
-    // CONSTANTS
-    private val LOG_TAG = "SEARCH_FRAGMENT"
-
-    // VARIABLES
+    // PROPS
     private lateinit var vm: SearchViewModel
 
     // WIDGETS
@@ -32,7 +33,6 @@ class SearchFragment : Fragment(), RecipeAdapter.OnListItemClickListener {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
-        // TODO: this?
         vm = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
 
         initializeWidgets(view, vm)
@@ -59,7 +59,17 @@ class SearchFragment : Fragment(), RecipeAdapter.OnListItemClickListener {
     }
 
     override fun onListItemClick(clickedItemIndex: Int) {
-        Toast.makeText(requireContext(), "Clicked Number: $clickedItemIndex", Toast.LENGTH_SHORT).show();
+        val idString = vm.recipes.value?.get(clickedItemIndex)?.id.toString()
+        setCurrentRecipeId(idString)
+        findNavController().navigate(R.id.action_searchFragment_to_currentRecipeFragment)
+    }
+
+    private fun setCurrentRecipeId(idString : String){
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putString(getString(R.string.current_recipe_id_string), idString)
+            apply()
+        }
     }
 
 }

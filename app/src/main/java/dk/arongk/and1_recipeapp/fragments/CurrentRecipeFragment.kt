@@ -1,60 +1,106 @@
 package dk.arongk.and1_recipeapp.fragments
 
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import dk.arongk.and1_recipeapp.R
+import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
+import dk.arongk.and1_recipeapp.viewModels.CurrentRecipeViewModel
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+//private const val ARG_RECIPE_ID = "recipeId"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CurrentRecipeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CurrentRecipeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // PROPS
+//    private var recipeId: UUID? = null
+    private lateinit var vm: CurrentRecipeViewModel
+
+    // WIDGETS
+    private lateinit var image: ImageView
+    private lateinit var title: TextView
+
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        arguments?.let {
+//            recipeId = UUID.fromString(it.getString(ARG_RECIPE_ID))
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_current_recipe, container, false)
+        val view = inflater.inflate(R.layout.fragment_current_recipe, container, false)
+
+//        savedInstanceState?.getString("recipeId")?.let {
+//            recipeId = UUID.fromString(it)
+//        }
+
+        vm = ViewModelProvider(requireActivity()).get(CurrentRecipeViewModel::class.java)
+
+        initializeWidgets(view, vm)
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CurrentRecipeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CurrentRecipeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun initializeWidgets(view: View, vm: CurrentRecipeViewModel) {
+//        recipeId?.let { vm.updateRecipe(it) }
+
+        getRecipeId().apply {
+            this?.let { vm.updateRecipe(it) }
+            Log.d("getRecipeId", vm.recipe.value.toString())
+        }
+
+        vm.recipe.observe(requireActivity(), androidx.lifecycle.Observer {
+            it?.let { updateWidgets(it) }
+        })
+        image = view.findViewById(R.id.current_image)
+
+        title = view.findViewById(R.id.current_title)
+
+//        updateWidgets(it)
     }
+
+    private fun updateWidgets(recipe: RecipeDto) {
+        vm.recipe.value?.let {
+            image.setImageURI(Uri.parse(it.imageUrl))
+            title.text = it.title
+        }
+        Log.d("getRecipeId", vm.recipe.value.toString())
+    }
+
+    private fun getRecipeId(): UUID? {
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val idString = sharedPref.getString(getString(R.string.current_recipe_id_string), "")
+        Log.d("getRecipeId", idString ?: "none")
+        return UUID.fromString(idString)
+    }
+
+//
+//    companion object {
+//        /**
+//         * Use this factory method to create a new instance of
+//         * this fragment using the provided parameters.
+//         *
+//         * @param recipeId Id of recipe to show.
+//         * @return A new instance of fragment CurrentRecipeFragment.
+//         */
+//        @JvmStatic
+//        fun newInstance(recipeId: String) =
+//            CurrentRecipeFragment().apply {
+//                arguments = Bundle().apply {
+//                    putString(ARG_RECIPE_ID, recipeId)
+//                }
+//            }
+//    }
 }

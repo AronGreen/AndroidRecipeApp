@@ -29,9 +29,26 @@ data class RecipeDto(
     val notes: String,
     @ColumnInfo(name = "image")
     val imageUrl: String,
-    ) {
+) {
     @Ignore
     var ingredients: List<IngredientListItemDto>? = null
+
     @Ignore
     var tags: List<TagDto>? = null
+
+    companion object {
+        fun getEmptyDummy(): RecipeDto {
+            return RecipeDto(
+                UUID.randomUUID(),
+                "",
+                0,
+                0,
+                0,
+                "",
+                "",
+                "",
+                ""
+            )
+        }
+    }
 }

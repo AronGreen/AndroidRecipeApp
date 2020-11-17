@@ -12,7 +12,7 @@ class RecipeRepository(
     private val ingredientListItemDao: IngredientListItemDao
 ) {
 
-    suspend fun get(id: UUID): RecipeDto {
+    fun get(id: UUID): LiveData<RecipeDto> {
         return recipeDao.get(id)
     }
 
@@ -55,9 +55,9 @@ class RecipeRepository(
         return newId
     }
 
-    suspend fun getRecipeFull(id: UUID): RecipeDto? {
-        val recipe = recipeDao.get(id)
-        recipe.ingredients = ingredientListItemDao.getForRecipe(id)
-        return recipe
-    }
+//    suspend fun getRecipeFull(id: UUID): RecipeDto? {
+//        val recipe = recipeDao.get(id)
+//        recipe.ingredients = ingredientListItemDao.getForRecipe(id)
+//        return recipe
+//    }
 }

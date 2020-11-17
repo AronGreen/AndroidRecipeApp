@@ -3,26 +3,29 @@ package dk.arongk.and1_recipeapp.viewModels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dk.arongk.and1_recipeapp.data.RecipeDatabase
 import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
 import dk.arongk.and1_recipeapp.data.repositories.RecipeRepository
+import java.util.*
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+class CurrentRecipeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: RecipeRepository
-    var recipes: LiveData<List<RecipeDto>>
+    var recipe: LiveData<RecipeDto>
 
     init {
-        val recipeDao = RecipeDatabase.getDatabase(application, viewModelScope).recipeDao()
-        val ingredientListItemDao =
-            RecipeDatabase.getDatabase(application, viewModelScope).ingredientListItemDao()
+        val db = RecipeDatabase.getDatabase(application, viewModelScope)
+        val recipeDao = db.recipeDao()
+        val ingredientListItemDao = db.ingredientListItemDao()
         repository = RecipeRepository(recipeDao, ingredientListItemDao)
 
-        recipes = repository.allRecipes
+        recipe = MutableLiveData()
     }
 
-    fun updateRecipes(){
-        recipes = repository.allRecipes
+    fun updateRecipe(id : UUID){
+        recipe = repository.get(id);
     }
+
 }

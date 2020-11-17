@@ -54,7 +54,6 @@ class CreateFragment : Fragment(), View.OnClickListener {
     private lateinit var createButton: Button
     private lateinit var addImageButton: Button
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
