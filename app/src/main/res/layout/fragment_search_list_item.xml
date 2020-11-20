@@ -12,7 +12,8 @@
     <ImageView
         android:id="@+id/sli_image"
         android:layout_width="84dp"
-        android:layout_height="84dp" />
+        android:layout_height="84dp"
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:layout_width="match_parent"

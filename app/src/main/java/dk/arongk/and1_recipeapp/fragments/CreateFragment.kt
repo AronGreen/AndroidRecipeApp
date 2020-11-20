@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -21,7 +20,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
-import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -60,13 +58,9 @@ class CreateFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_create, container, false)
-
         vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java)
-
-        initializeWidgets(view)
-
         imageUri = vm.imageUri
-
+        initializeWidgets(view, vm)
         return view
     }
 
@@ -110,6 +104,8 @@ class CreateFragment : Fragment(), View.OnClickListener {
             when(requestCode){
                 REQUEST_IMAGE_CAPTURE -> {
                     //            val auxFile = File(currentPhotoPath)
+                    recipeImage.visibility = View.VISIBLE
+                    addImageButton.text = "Change image"
                     val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
                     recipeImage.setImageBitmap(bitmap)
                     vm.imageUri = currentPhotoPath
@@ -189,14 +185,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         )
     }
 
-//    private fun pickImageFromGallery() {
-//        //Intent to pick image
-//        val intent = Intent(Intent.ACTION_PICK)
-//        intent.type = "image/*"
-//        startActivityForResult(intent, IMAGE_PICK_ACTIVITY_REQUEST_CODE)
-//    }
-
-    private fun initializeWidgets(view: View) {
+    private fun initializeWidgets(view: View, vm: CreateViewModel) {
         title = view.findViewById(R.id.title)
         workTime = view.findViewById(R.id.workTime)
         totalTime = view.findViewById(R.id.totalTime)
@@ -205,8 +194,10 @@ class CreateFragment : Fragment(), View.OnClickListener {
         instructions = view.findViewById(R.id.instructions)
         notes = view.findViewById(R.id.notes)
         recipeImage = view.findViewById(R.id.recipeImage)
+        recipeImage.visibility =  if (vm.imageUri.isBlank())  View.GONE else View.VISIBLE
         createButton = view.findViewById(R.id.createButton)
         addImageButton = view.findViewById(R.id.addImageButton)
+        addImageButton.text = if (vm.imageUri.isBlank())  addImageButton.text else "Change image"
 
         createButton.setOnClickListener(this)
         addImageButton.setOnClickListener(this)

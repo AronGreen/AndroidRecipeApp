@@ -10,11 +10,12 @@
     <ImageView
         android:id="@+id/current_image"
         android:layout_width="match_parent"
-        android:layout_height="105dp"
+        android:layout_height="144dp"
         android:src="@drawable/ic_baseline_cake_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/current_title"
@@ -129,48 +130,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <!--    <LinearLayout-->
-    <!--        android:id="@+id/linearLayout"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="8dp"-->
-    <!--        android:layout_weight="1"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/divider2">-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/current_workTime"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:gravity="center|start"-->
-    <!--            android:paddingLeft="8dp"-->
-    <!--            android:text="💪 10 min"-->
-    <!--            android:textSize="12sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/current_totalTime"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:gravity="center|start"-->
-    <!--            android:paddingLeft="8dp"-->
-    <!--            android:text="⏱ 25 min"-->
-    <!--            android:textSize="12sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/current_servings"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:gravity="center|start"-->
-    <!--            android:paddingLeft="8dp"-->
-    <!--            android:text="👪 2 pers"-->
-    <!--            android:textSize="12sp" />-->
-    <!--    </LinearLayout>-->
 
     <View
         android:id="@+id/divider"
