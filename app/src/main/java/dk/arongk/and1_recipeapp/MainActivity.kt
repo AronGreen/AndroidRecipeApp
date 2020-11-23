@@ -22,7 +22,9 @@ class MainActivity : AppCompatActivity() {
         db = Room.databaseBuilder(
             applicationContext,
             RecipeDatabase::class.java, "recipe_db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
 
     }
 }

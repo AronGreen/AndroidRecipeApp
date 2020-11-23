@@ -1,12 +1,22 @@
 package dk.arongk.and1_recipeapp.data.repositories
 
 import androidx.lifecycle.LiveData
+import dk.arongk.and1_recipeapp.data.apiClients.NutritionAnalysisEndpoints
+import dk.arongk.and1_recipeapp.data.apiClients.NutritionAnalysisResponse
+import dk.arongk.and1_recipeapp.data.apiClients.ServiceBuilder
 import dk.arongk.and1_recipeapp.data.dao.IngredientDao
 import dk.arongk.and1_recipeapp.data.dao.IngredientListItemDao
 import dk.arongk.and1_recipeapp.data.dao.RecipeDao
 import dk.arongk.and1_recipeapp.models.ingredient.IngredientDto
+import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCreateModel
 import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class RecipeRepository(
@@ -44,9 +54,9 @@ class RecipeRepository(
 
 
         recipe.ingredients
-//            .filter {
-//                it.ingredientName.isNotBlank()
-//            }
+            .filter {
+                it.ingredientName.isNotBlank()
+            }
             .forEach {
                 // TODO: this could probs be more concise, too tired rn
                 val existingIngredient = ingredientDao.get(it.ingredientName)
@@ -56,23 +66,31 @@ class RecipeRepository(
                 }
 
                 ingredientListItemDao.insert(it.toDto(UUID.randomUUID(), newId, ingredientId))
+                getNutritionAnalysis(it, newId)
             }
-
-
-//        val tags = recipe.tags
-//        if (tags != null){
-//            for (tag in tags){
-//                // TODO: tagDao
-//            }
-//
-//        }
 
         return newId
     }
 
-//    suspend fun getRecipeFull(id: UUID): RecipeDto? {
-//        val recipe = recipeDao.get(id)
-//        recipe.ingredients = ingredientListItemDao.getForRecipe(id)
-//        return recipe
-//    }
+    private suspend fun getNutritionAnalysis(createModel: IngredientListItemCreateModel, dtoId : UUID ){
+
+        val request = ServiceBuilder.buildService(NutritionAnalysisEndpoints::class.java)
+        val call = request.getNutritionAnalysis(createModel.toString())
+
+        call.enqueue(object : Callback<NutritionAnalysisResponse> {
+            override fun onResponse(call: Call<NutritionAnalysisResponse>, response: Response<NutritionAnalysisResponse>) {
+                if (response.isSuccessful){
+                    GlobalScope.launch(Dispatchers.IO) {
+
+                        ingredientListItemDao.updateCalories(dtoId, response.body()?.calories?.toString() ?: "")
+
+                    }
+                }
+            }
+            override fun onFailure(call: Call<NutritionAnalysisResponse>, t: Throwable) {
+                // TODO: save failed ingredients for later retry
+            }
+        })
+    }
+
 }

@@ -40,5 +40,7 @@ data class IngredientListItemDto(
     @ColumnInfo(name = "unit")
     val unit: String,
     @ColumnInfo(name = "operation")
-    val operation: String
-)
+    val operation: String,
+    @ColumnInfo(name = "calories")
+    val calories: String,
+    )

@@ -16,6 +16,11 @@ data class IngredientListItemCreateModel(
             ingredientId = ingredientId,
             ingredientName = ingredientName,
             unit = unit,
-            operation = operation
+            operation = operation,
+            calories = ""
         )
+
+    override fun toString(): String {
+        return "$quantity $unit $ingredientName"
+    }
 }
