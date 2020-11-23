@@ -1,8 +1,8 @@
-package dk.arongk.and1_recipeapp.data.model.recipe
+package dk.arongk.and1_recipeapp.models.recipe
 
 import androidx.room.*
-import dk.arongk.and1_recipeapp.data.model.ingredientListItem.IngredientListItemDto
-import dk.arongk.and1_recipeapp.data.model.tag.TagDto
+import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemDto
+import dk.arongk.and1_recipeapp.models.tag.TagDto
 import java.util.*
 
 @Entity(

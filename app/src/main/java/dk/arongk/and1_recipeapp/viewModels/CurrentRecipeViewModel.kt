@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dk.arongk.and1_recipeapp.data.RecipeDatabase
-import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
+import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
 import dk.arongk.and1_recipeapp.data.repositories.RecipeRepository
 import java.util.*
 

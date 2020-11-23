@@ -24,8 +24,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dk.arongk.and1_recipeapp.R
-import dk.arongk.and1_recipeapp.data.model.ingredientListItem.IngredientListItemCreateModel
-import dk.arongk.and1_recipeapp.data.model.recipe.RecipeCreateModel
+import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCreateModel
+import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.viewModels.CreateViewModel
 import java.io.File
 import java.io.IOException

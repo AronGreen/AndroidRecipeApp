@@ -2,7 +2,7 @@ package dk.arongk.and1_recipeapp.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import dk.arongk.and1_recipeapp.data.model.tag.TagDto
+import dk.arongk.and1_recipeapp.models.tag.TagDto
 import java.util.*
 
 @Dao

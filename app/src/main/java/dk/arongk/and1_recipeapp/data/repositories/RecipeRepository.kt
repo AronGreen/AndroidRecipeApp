@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import dk.arongk.and1_recipeapp.data.dao.IngredientDao
 import dk.arongk.and1_recipeapp.data.dao.IngredientListItemDao
 import dk.arongk.and1_recipeapp.data.dao.RecipeDao
-import dk.arongk.and1_recipeapp.data.model.ingredient.IngredientDto
-import dk.arongk.and1_recipeapp.data.model.recipe.RecipeCreateModel
-import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
+import dk.arongk.and1_recipeapp.models.ingredient.IngredientDto
+import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
+import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
 import java.util.*
 
 class RecipeRepository(

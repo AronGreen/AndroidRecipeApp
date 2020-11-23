@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import dk.arongk.and1_recipeapp.R
-import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
+import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
 import dk.arongk.and1_recipeapp.viewModels.CurrentRecipeViewModel
 import java.util.*
 

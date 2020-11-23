@@ -9,8 +9,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import dk.arongk.and1_recipeapp.R
 import dk.arongk.and1_recipeapp.data.RecipeDatabase
-import dk.arongk.and1_recipeapp.data.model.ingredientListItem.IngredientListItemCreateModel
-import dk.arongk.and1_recipeapp.data.model.recipe.RecipeCreateModel
+import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCreateModel
+import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.data.repositories.RecipeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

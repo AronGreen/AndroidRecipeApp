@@ -1,4 +1,4 @@
-package dk.arongk.and1_recipeapp.data.model.ingredientListItem
+package dk.arongk.and1_recipeapp.models.ingredientListItem
 
 import java.util.*
 
