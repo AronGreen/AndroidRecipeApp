@@ -17,9 +17,7 @@ class CurrentRecipeViewModel(application: Application) : AndroidViewModel(applic
 
     init {
         val db = RecipeDatabase.getDatabase(application, viewModelScope)
-        val recipeDao = db.recipeDao()
-        val ingredientListItemDao = db.ingredientListItemDao()
-        repository = RecipeRepository(recipeDao, ingredientListItemDao)
+        repository = RecipeRepository(db.recipeDao(), db.ingredientListItemDao(), db.ingredientDao())
 
         recipe = MutableLiveData()
     }

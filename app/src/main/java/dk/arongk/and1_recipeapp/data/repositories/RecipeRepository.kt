@@ -1,15 +1,18 @@
 package dk.arongk.and1_recipeapp.data.repositories
 
 import androidx.lifecycle.LiveData
+import dk.arongk.and1_recipeapp.data.dao.IngredientDao
 import dk.arongk.and1_recipeapp.data.dao.IngredientListItemDao
 import dk.arongk.and1_recipeapp.data.dao.RecipeDao
+import dk.arongk.and1_recipeapp.data.model.ingredient.IngredientDto
 import dk.arongk.and1_recipeapp.data.model.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.data.model.recipe.RecipeDto
 import java.util.*
 
 class RecipeRepository(
     private val recipeDao: RecipeDao,
-    private val ingredientListItemDao: IngredientListItemDao
+    private val ingredientListItemDao: IngredientListItemDao,
+    private val ingredientDao: IngredientDao
 ) {
 
     fun get(id: UUID): LiveData<RecipeDto> {
@@ -22,7 +25,7 @@ class RecipeRepository(
         return recipeDao.getAll()
     }
 
-    val allRecipes : LiveData<List<RecipeDto>> = recipeDao.getAll()
+    val allRecipes: LiveData<List<RecipeDto>> = recipeDao.getAll()
 
 
     //TODO: use updateRecipeModel
@@ -39,10 +42,22 @@ class RecipeRepository(
 
         recipeDao.insert(recipe.toDto(newId))
 
-        val ingredients = recipe.ingredients
-        for (ingredient in ingredients) {
-            ingredientListItemDao.insert(ingredient.copy(recipeId = newId))
-        }
+
+        recipe.ingredients
+//            .filter {
+//                it.ingredientName.isNotBlank()
+//            }
+            .forEach {
+                // TODO: this could probs be more concise, too tired rn
+                val existingIngredient = ingredientDao.get(it.ingredientName)
+                val ingredientId: UUID = existingIngredient?.id ?: UUID.randomUUID()
+                if (existingIngredient == null) {
+                    ingredientDao.insert(IngredientDto(ingredientId, it.ingredientName))
+                }
+
+                ingredientListItemDao.insert(it.toDto(UUID.randomUUID(), newId, ingredientId))
+            }
+
 
 //        val tags = recipe.tags
 //        if (tags != null){

@@ -15,6 +15,9 @@ interface IngredientDao {
     @Query("SELECT * FROM ingredients WHERE id = :id")
     suspend fun get(id: Int): IngredientDto
 
+    @Query("SELECT * FROM ingredients WHERE name = :name")
+    suspend fun get(name: String): IngredientDto?
+
     @Update
     suspend fun update(ingredientDto: IngredientDto)
 

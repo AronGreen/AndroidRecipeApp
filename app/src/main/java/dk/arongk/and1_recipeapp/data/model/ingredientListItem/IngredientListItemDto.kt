@@ -37,6 +37,8 @@ data class IngredientListItemDto(
     val ingredientId: UUID,
     @ColumnInfo(name = "ingredientName")
     val ingredientName: String,
+    @ColumnInfo(name = "unit")
+    val unit: String,
     @ColumnInfo(name = "operation")
     val operation: String
 )

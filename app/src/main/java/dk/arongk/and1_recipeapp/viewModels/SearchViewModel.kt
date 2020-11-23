@@ -14,10 +14,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     var recipes: LiveData<List<RecipeDto>>
 
     init {
-        val recipeDao = RecipeDatabase.getDatabase(application, viewModelScope).recipeDao()
-        val ingredientListItemDao =
-            RecipeDatabase.getDatabase(application, viewModelScope).ingredientListItemDao()
-        repository = RecipeRepository(recipeDao, ingredientListItemDao)
+        val db = RecipeDatabase.getDatabase(application, viewModelScope)
+        repository = RecipeRepository(db.recipeDao(), db.ingredientListItemDao(), db.ingredientDao())
 
         recipes = repository.allRecipes
     }

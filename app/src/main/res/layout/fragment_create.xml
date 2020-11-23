@@ -16,12 +16,12 @@
             android:id="@+id/recipeImage"
             android:layout_width="415dp"
             android:layout_height="144dp"
-            android:src="@drawable/ic_baseline_cake_24"
             android:contentDescription="Picture of recipe"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_baseline_cake_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:scaleType="centerCrop"  />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/addImageButton"
@@ -31,15 +31,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipeImage" />
-
-<!--        <TextView-->
-<!--            android:id="@+id/textView3"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Create recipe"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutTitle"
@@ -56,58 +47,68 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutWorkTime"
+        <LinearLayout
+            android:id="@+id/create_linearLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutTitle"
-            tools:layout_editor_absoluteX="173dp">
+            app:layout_constraintTop_toBottomOf="@+id/layoutTitle">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/workTime"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutWorkTime"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Work time"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_weight="1"
+                tools:layout_editor_absoluteX="173dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutTotalTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/layoutWorkTime"
-            tools:layout_editor_absoluteX="183dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/workTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Work time"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/totalTime"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutTotalTime"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Total time"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_weight="1"
+                tools:layout_editor_absoluteX="183dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutServings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/layoutTotalTime"
-            tools:layout_editor_absoluteX="223dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/totalTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Total time"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/servings"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutServings"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Servings"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_weight="1"
+                tools:layout_editor_absoluteX="223dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/servings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Servings"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/layoutServings"
+            app:layout_constraintTop_toBottomOf="@+id/create_linearLayout1"
             tools:layout_editor_absoluteX="221dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -117,11 +118,29 @@
                 android:hint="Description" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/create_ingredientsLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/layoutDescription">
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/addIngredientButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add ingredient"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/create_ingredientsLinearLayout" />
+
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutInstructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/layoutDescription"
+            app:layout_constraintTop_toBottomOf="@+id/addIngredientButton"
             tools:layout_editor_absoluteX="163dp">
 
             <com.google.android.material.textfield.TextInputEditText

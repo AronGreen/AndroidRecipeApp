@@ -24,7 +24,7 @@ import java.util.*
     IngredientListItemDto::class,
     IngredientDto::class,
     TagDto::class
-), version = 1, exportSchema = false) // TODO: look into exportSchema
+), version = 2, exportSchema = false) // TODO: look into exportSchema
 @TypeConverters(Converters::class)
 abstract class RecipeDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao

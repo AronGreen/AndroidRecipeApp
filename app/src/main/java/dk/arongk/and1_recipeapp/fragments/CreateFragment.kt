@@ -16,15 +16,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dk.arongk.and1_recipeapp.R
+import dk.arongk.and1_recipeapp.data.model.ingredientListItem.IngredientListItemCreateModel
+import dk.arongk.and1_recipeapp.data.model.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.viewModels.CreateViewModel
 import java.io.File
 import java.io.IOException
@@ -51,6 +52,9 @@ class CreateFragment : Fragment(), View.OnClickListener {
     private lateinit var recipeImage: ImageView
     private lateinit var createButton: Button
     private lateinit var addImageButton: Button
+    private lateinit var addIngredientButton: Button
+
+    private lateinit var ingredientsLinearLayout : LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +65,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java)
         imageUri = vm.imageUri
         initializeWidgets(view, vm)
+        initializeIngredientList()
         return view
     }
 
@@ -78,6 +83,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         when (v?.id) {
             R.id.createButton -> createRecipe()
             R.id.addImageButton -> initTakePicture()
+            R.id.addIngredientButton -> addIngredient()
         }
     }
 
@@ -120,16 +126,20 @@ class CreateFragment : Fragment(), View.OnClickListener {
     private fun createRecipe() {
         Log.i(LOG_TAG, "create recipe: " + title.text.toString())
         saveToViewModel()
-        vm.insert(
-            vm.title,
-            vm.workTime.toIntOrNull() ?: 0,
-            vm.totalTime.toIntOrNull() ?: 0,
-            vm.servings.toIntOrNull() ?: 0,
-            vm.description,
-            vm.instructions,
-            vm.notes,
-            vm.imageUri
-        )
+
+        val model = RecipeCreateModel()
+        model.title = vm.title
+        model.workTime = vm.workTime.toIntOrNull() ?: 0
+        model.totalTime = vm.totalTime.toIntOrNull() ?: 0
+        model.servings = vm.servings.toIntOrNull() ?: 0
+        model.description = vm.description
+        model.instructions = vm.instructions
+        model.notes = vm.notes
+        model.imageUrl = vm.imageUri
+        // pass a copy, otherwise it will be cleared before we can dao anything with it :)
+        model.ingredients = vm.ingredients.toMutableList()
+
+        vm.insert(model = model, findNavController(), requireActivity(), this)
         clearViewModel()
     }
 
@@ -185,7 +195,13 @@ class CreateFragment : Fragment(), View.OnClickListener {
         )
     }
 
-    private fun initializeWidgets(view: View, vm: CreateViewModel) {
+    private fun addIngredient() {
+        val element = IngredientListItemCreateModel(0, "", "", "")
+        vm.ingredients.add(element)
+        addIngredientListItem(element)
+    }
+
+    private fun initializeWidgets(view: View, vm: CreateViewModel) { //TODO: verify that 'vm' parameter is unnecessary here and remove accordingly
         title = view.findViewById(R.id.title)
         workTime = view.findViewById(R.id.workTime)
         totalTime = view.findViewById(R.id.totalTime)
@@ -198,9 +214,65 @@ class CreateFragment : Fragment(), View.OnClickListener {
         createButton = view.findViewById(R.id.createButton)
         addImageButton = view.findViewById(R.id.addImageButton)
         addImageButton.text = if (vm.imageUri.isBlank())  addImageButton.text else "Change image"
+        addIngredientButton = view.findViewById(R.id.addIngredientButton)
 
         createButton.setOnClickListener(this)
         addImageButton.setOnClickListener(this)
+        addIngredientButton.setOnClickListener(this)
+
+        ingredientsLinearLayout = view.findViewById(R.id.create_ingredientsLinearLayout)
+    }
+
+    // keeping track of programatically added EditText elements
+    private data class IngredientValues(val qty : EditText, val unit : EditText, val name : EditText, val operation: EditText)
+    private val ingredientValues : MutableList<IngredientValues> = mutableListOf()
+
+    private fun initializeIngredientList(){
+        vm.ingredients.forEach {
+            addIngredientListItem(it)
+        }
+    }
+
+    private fun addIngredientListItem(it: IngredientListItemCreateModel) {
+        val ingredientLL = LinearLayout(requireContext())
+        ingredientLL.orientation = LinearLayout.HORIZONTAL
+        ingredientLL.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+
+        val quantity = EditText(requireContext())
+        quantity.hint = "Qty"
+        quantity.setText(it.quantity.toString())
+        quantity.text
+
+        val unit = EditText(requireContext())
+        unit.hint = "Unit"
+        unit.setText(it.unit)
+
+        val name = EditText(requireContext())
+        name.hint = "Ingredient"
+        name.setText(it.ingredientName)
+
+        val operation = EditText(requireContext())
+        operation.hint = "Operation"
+        operation.setText(it.operation)
+
+        ingredientLL.addView(quantity)
+        ingredientLL.addView(unit)
+        ingredientLL.addView(name)
+        ingredientLL.addView(operation)
+
+        ingredientValues.add(
+            IngredientValues(
+                qty = quantity,
+                unit = unit,
+                name = name,
+                operation = operation
+            )
+        )
+
+        ingredientsLinearLayout.addView(ingredientLL)
     }
 
     private fun saveToViewModel() {
@@ -212,6 +284,16 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.instructions = instructions.text.toString()
         vm.notes = notes.text.toString()
         vm.imageUri = imageUri
+
+        vm.ingredients.clear()
+        ingredientValues.forEach {
+            vm.ingredients.add(IngredientListItemCreateModel(
+                quantity = it.qty.text.toString().toIntOrNull() ?:0,
+                ingredientName = it.name.text.toString(),
+                unit = it.unit.text.toString(),
+                operation = it.operation.text.toString()
+            ))
+        }
     }
 
     private fun restoreFromViewModel() {
@@ -224,6 +306,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         notes.setText(vm.notes)
         recipeImage.setImageURI(Uri.parse(vm.imageUri))
         imageUri = vm.imageUri
+//        initIngredientList()
     }
 
     private fun clearViewModel() {
@@ -235,12 +318,14 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.instructions = ""
         vm.notes = ""
         vm.imageUri = ""
+        vm.ingredients.clear()
+        initializeIngredientList()
         restoreFromViewModel()
     }
 
     companion object {
         private const val LOG_TAG = "CREATE_FRAGMENT"
-        private const val IMAGE_PICK_ACTIVITY_REQUEST_CODE = 1
+        private const val IMAGE_PICK_ACTIVITY_REQUEST_CODE = 1 // TODO: remove
         private const val PERMISSION_REQUEST_CODE = 2
         private const val REQUEST_IMAGE_CAPTURE = 3
     }
