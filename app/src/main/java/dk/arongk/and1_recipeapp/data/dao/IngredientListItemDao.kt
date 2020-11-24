@@ -1,5 +1,6 @@
 package dk.arongk.and1_recipeapp.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemDto
 import java.util.*
@@ -10,10 +11,10 @@ interface IngredientListItemDao {
     suspend fun insert(recipe: IngredientListItemDto)
 
     @Query("SELECT * FROM ingredientListItems WHERE recipeId = :recipeId")
-    suspend fun getForRecipe(recipeId: UUID): List<IngredientListItemDto>
+    fun getForRecipe(recipeId: UUID): LiveData<List<IngredientListItemDto>>
 
     @Query("SELECT * FROM ingredientListItems WHERE id = :id")
-    suspend fun get(id: UUID): IngredientListItemDto
+    fun get(id: UUID): LiveData<IngredientListItemDto>
 
     @Update
     suspend fun update(ingredientListItem: IngredientListItemDto)

@@ -20,7 +20,7 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
     var workTime: String = ""
     var totalTime: String = ""
     var servings: String = ""
-    var description: String = ""
+//    var description: String = ""
     var instructions: String = ""
     var notes: String = ""
     var imageUri: String = ""
@@ -32,7 +32,7 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
         val db = RecipeDatabase.getDatabase(application, viewModelScope)
         repository =
             RecipeRepository(db.recipeDao(), db.ingredientListItemDao(), db.ingredientDao())
-        ingredients = mutableListOf(IngredientListItemCreateModel(1, "Banana", "", "Chopped"))
+        ingredients = mutableListOf(IngredientListItemCreateModel(0f, "", "", ""))
     }
 
     fun insert(model: RecipeCreateModel, navController: NavController, activity: Activity, fragment: Fragment)  = viewModelScope.launch(Dispatchers.IO) {
@@ -45,7 +45,7 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
                 putString(fragment.getString(R.string.current_recipe_id_string), id.toString())
                 apply()
             }
-            navController.navigate(R.id.action_createFragment_to_currentRecipeFragment)
+            navController.navigate(R.id.action_createFragment_to_searchFragment)
         }
     }
 

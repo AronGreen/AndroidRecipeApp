@@ -40,13 +40,16 @@ class CreateFragment : Fragment(), View.OnClickListener {
     private lateinit var vm: CreateViewModel
     private lateinit var imageUri: String
     private lateinit var currentPhotoPath: String
+    // keeping track of programatically added EditText elements
+    private data class IngredientValues(val qty : EditText, val unit : Spinner, val name : EditText, val operation: EditText)
+    private val ingredientValues : MutableList<IngredientValues> = mutableListOf()
 
     // WIDGETS
     private lateinit var title: TextInputEditText
     private lateinit var workTime: TextInputEditText
     private lateinit var totalTime: TextInputEditText
     private lateinit var servings: TextInputEditText
-    private lateinit var description: TextInputEditText
+//    private lateinit var description: TextInputEditText
     private lateinit var instructions: TextInputEditText
     private lateinit var notes: TextInputEditText
     private lateinit var recipeImage: ImageView
@@ -132,7 +135,6 @@ class CreateFragment : Fragment(), View.OnClickListener {
         model.workTime = vm.workTime.toIntOrNull() ?: 0
         model.totalTime = vm.totalTime.toIntOrNull() ?: 0
         model.servings = vm.servings.toIntOrNull() ?: 0
-        model.description = vm.description
         model.instructions = vm.instructions
         model.notes = vm.notes
         model.imageUrl = vm.imageUri
@@ -196,7 +198,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
     }
 
     private fun addIngredient() {
-        val element = IngredientListItemCreateModel(0, "", "", "")
+        val element = IngredientListItemCreateModel(0f, "", "", "")
         vm.ingredients.add(element)
         addIngredientListItem(element)
     }
@@ -206,7 +208,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         workTime = view.findViewById(R.id.workTime)
         totalTime = view.findViewById(R.id.totalTime)
         servings = view.findViewById(R.id.servings)
-        description = view.findViewById(R.id.description)
+//        description = view.findViewById(R.id.description)
         instructions = view.findViewById(R.id.instructions)
         notes = view.findViewById(R.id.notes)
         recipeImage = view.findViewById(R.id.recipeImage)
@@ -222,10 +224,6 @@ class CreateFragment : Fragment(), View.OnClickListener {
 
         ingredientsLinearLayout = view.findViewById(R.id.create_ingredientsLinearLayout)
     }
-
-    // keeping track of programatically added EditText elements
-    private data class IngredientValues(val qty : EditText, val unit : EditText, val name : EditText, val operation: EditText)
-    private val ingredientValues : MutableList<IngredientValues> = mutableListOf()
 
     private fun initializeIngredientList(){
         vm.ingredients.forEach {
@@ -244,11 +242,19 @@ class CreateFragment : Fragment(), View.OnClickListener {
         val quantity = EditText(requireContext())
         quantity.hint = "Qty"
         quantity.setText(it.quantity.toString())
-        quantity.text
 
-        val unit = EditText(requireContext())
-        unit.hint = "Unit"
-        unit.setText(it.unit)
+        val unit = Spinner(requireContext())
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.units_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            unit.adapter = adapter
+            unit.setSelection(adapter.getPosition(it.unit))
+        }
 
         val name = EditText(requireContext())
         name.hint = "Ingredient"
@@ -280,7 +286,6 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.workTime = workTime.text.toString()
         vm.totalTime = totalTime.text.toString()
         vm.servings = servings.text.toString()
-        vm.description = description.text.toString()
         vm.instructions = instructions.text.toString()
         vm.notes = notes.text.toString()
         vm.imageUri = imageUri
@@ -288,9 +293,9 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.ingredients.clear()
         ingredientValues.forEach {
             vm.ingredients.add(IngredientListItemCreateModel(
-                quantity = it.qty.text.toString().toIntOrNull() ?:0,
+                quantity = it.qty.text.toString().toFloatOrNull() ?: 0f,
                 ingredientName = it.name.text.toString(),
-                unit = it.unit.text.toString(),
+                unit = it.unit.selectedItem.toString(),
                 operation = it.operation.text.toString()
             ))
         }
@@ -301,12 +306,10 @@ class CreateFragment : Fragment(), View.OnClickListener {
         workTime.setText(vm.workTime)
         totalTime.setText(vm.totalTime)
         servings.setText(vm.servings)
-        description.setText(vm.description)
         instructions.setText(vm.workTime)
         notes.setText(vm.notes)
         recipeImage.setImageURI(Uri.parse(vm.imageUri))
         imageUri = vm.imageUri
-//        initIngredientList()
     }
 
     private fun clearViewModel() {
@@ -314,7 +317,6 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.workTime = ""
         vm.totalTime = ""
         vm.servings = ""
-        vm.description = ""
         vm.instructions = ""
         vm.notes = ""
         vm.imageUri = ""

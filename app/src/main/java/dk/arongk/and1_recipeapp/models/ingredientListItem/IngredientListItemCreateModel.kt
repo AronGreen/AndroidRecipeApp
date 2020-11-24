@@ -3,7 +3,7 @@ package dk.arongk.and1_recipeapp.models.ingredientListItem
 import java.util.*
 
 data class IngredientListItemCreateModel(
-    var quantity: Int,
+    var quantity: Float,
     var ingredientName: String,
     var unit: String,
     var operation: String

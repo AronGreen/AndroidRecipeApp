@@ -28,8 +28,8 @@
         android:label="fragment_create"
         tools:layout="@layout/fragment_create" >
         <action
-            android:id="@+id/action_createFragment_to_currentRecipeFragment"
-            app:destination="@id/currentRecipeFragment" />
+            android:id="@+id/action_createFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

@@ -32,7 +32,7 @@ data class IngredientListItemDto(
     @ColumnInfo(name = "recipeId")
     val recipeId: UUID,
     @ColumnInfo(name = "quantity")
-    val quantity: Int,
+    val quantity: Float,
     @ColumnInfo(name = "ingredientId")
     val ingredientId: UUID,
     @ColumnInfo(name = "ingredientName")

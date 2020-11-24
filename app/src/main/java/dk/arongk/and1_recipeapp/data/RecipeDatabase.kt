@@ -39,25 +39,21 @@ abstract class RecipeDatabase : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.tagDao(), database.recipeDao())
+                    populateDatabase(database.recipeDao())
                 }
             }
         }
 
-        suspend fun populateDatabase(tagDao: TagDao, recipeDao: RecipeDao) {
-            tagDao.deleteByValue("test")
-            tagDao.insert(TagDto(UUID.randomUUID(),"test"))
-
-            val createRecipeModel = RecipeCreateModel().also {
-                it.title = "Mashed potatoes"
-                it.description = "A great recipe"
-                it.workTime = 20
-                it.totalTime = 40
-                it.servings = 2
+        suspend fun populateDatabase(recipeDao: RecipeDao) {
+            val createRecipeModel = RecipeCreateModel().apply {
+                title = "Mashed potatoes"
+                workTime = 20
+                totalTime = 40
+                servings = 2
             }
-            recipeDao.insert(createRecipeModel.toDto(UUID.randomUUID()))
+            recipeDao.insert(createRecipeModel.toDto())
             createRecipeModel.title = "Mirror eggs"
-            recipeDao.insert(createRecipeModel.toDto(UUID.randomUUID()))
+            recipeDao.insert(createRecipeModel.copy(id = UUID.randomUUID()).toDto())
         }
     }
 

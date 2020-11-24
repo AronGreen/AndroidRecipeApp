@@ -5,9 +5,7 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object ServiceBuilder {
-    // NOTE: this client will have headers specific to the edamam nutritional api, take this
-    // into account if more endpoints should be consumed in the future
+object NutritionServiceBuilder {
     private val client = OkHttpClient
         .Builder()
         .addInterceptor { chain ->

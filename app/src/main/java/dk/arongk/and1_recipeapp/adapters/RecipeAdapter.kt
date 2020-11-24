@@ -35,7 +35,7 @@ class RecipeAdapter(
         holder.workTime.text = recipes.get(position).workTime.toString()
         holder.totalTime.text = recipes.get(position).totalTime.toString()
         holder.servings.text = recipes.get(position).servings.toString()
-        holder.description.text = recipes.get(position).description
+//        holder.description.text = recipes.get(position).description
     }
 
     override fun getItemCount() = recipes.size
@@ -54,7 +54,7 @@ class RecipeAdapter(
        var workTime : TextView = itemView.findViewById(R.id.sli_workTime)
        var totalTime : TextView= itemView.findViewById(R.id.sli_totalTime)
        var servings : TextView= itemView.findViewById(R.id.sli_servings)
-       var description : TextView= itemView.findViewById(R.id.sli_description)
+//       var description : TextView= itemView.findViewById(R.id.sli_description)
 
         override fun onClick(v: View?) {
             mOnListItemClickListener.onListItemClick(adapterPosition)

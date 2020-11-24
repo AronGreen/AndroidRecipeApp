@@ -21,8 +21,8 @@ data class RecipeDto(
     val totalTime: Int,
     @ColumnInfo(name = "servings")
     val servings: Int,
-    @ColumnInfo(name = "description")
-    val description: String,
+//    @ColumnInfo(name = "description")
+//    val description: String,
     @ColumnInfo(name = "instructions")
     val instructions: String,
     @ColumnInfo(name = "notes")
@@ -33,22 +33,7 @@ data class RecipeDto(
     @Ignore
     var ingredients: List<IngredientListItemDto>? = null
 
-    @Ignore
-    var tags: List<TagDto>? = null
+//    @Ignore
+//    var tags: List<TagDto>? = null
 
-    companion object {
-        fun getEmptyDummy(): RecipeDto {
-            return RecipeDto(
-                UUID.randomUUID(),
-                "",
-                0,
-                0,
-                0,
-                "",
-                "",
-                "",
-                ""
-            )
-        }
-    }
 }
