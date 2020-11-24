@@ -241,7 +241,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
 
         val quantity = EditText(requireContext())
         quantity.hint = "Qty"
-        quantity.setText(it.quantity.toString())
+        quantity.setText(it.quantity.let { if (it == 0f) "" else it.toString() })
 
         val unit = Spinner(requireContext())
         ArrayAdapter.createFromResource(
