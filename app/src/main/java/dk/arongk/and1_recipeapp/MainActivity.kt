@@ -15,6 +15,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Not using the action bar, so it is only visual clutter
+        supportActionBar?.hide()
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment_container)
         NavigationUI.setupWithNavController(bottomNav, navController)

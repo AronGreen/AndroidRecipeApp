@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    tools:context=".MainActivity">
 
     <fragment
         android:id="@+id/nav_host_fragment_container"
@@ -21,9 +22,9 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/navigation"
+        app:itemIconTint="#fff"
         app:itemTextColor="#fff"
-        app:itemIconTint="#fff"/>
+        app:menu="@menu/navigation" />
 
 
 </LinearLayout>

@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.FileProvider
@@ -242,6 +243,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         val quantity = EditText(requireContext())
         quantity.hint = "Qty"
         quantity.setText(it.quantity.let { if (it == 0f) "" else it.toString() })
+        quantity.inputType = EditorInfo.TYPE_CLASS_NUMBER
 
         val unit = Spinner(requireContext())
         ArrayAdapter.createFromResource(

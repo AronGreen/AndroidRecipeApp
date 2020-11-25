@@ -76,7 +76,7 @@
                     android:id="@+id/workTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Work time"
+                    android:hint="Work time (min)"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,7 +91,7 @@
                     android:id="@+id/totalTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Total time"
+                    android:hint="Total time (min)"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
