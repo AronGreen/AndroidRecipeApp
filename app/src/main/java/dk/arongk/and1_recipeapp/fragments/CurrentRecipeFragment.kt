@@ -1,5 +1,6 @@
 package dk.arongk.and1_recipeapp.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -41,8 +42,12 @@ class CurrentRecipeFragment : Fragment() {
 
         vm = ViewModelProvider(this).get(CurrentRecipeViewModel::class.java)
         getRecipeId().apply {
-            if(this == null){
-                Toast.makeText(requireContext(), "No recipe selected, please select one", Toast.LENGTH_LONG).show()
+            if (this == null) {
+                Toast.makeText(
+                    requireContext(),
+                    "No recipe selected, please select one",
+                    Toast.LENGTH_LONG
+                ).show()
                 findNavController().navigate(R.id.action_currentRecipeFragment_to_searchFragment)
             }
             this?.let { vm.updateRecipe(it) }
@@ -65,6 +70,9 @@ class CurrentRecipeFragment : Fragment() {
         vm.recipe.observe(requireActivity(), {
             it?.let { updateWidgets() }
         })
+        // NOTE: This was made before I found out about @Relation in Room
+        // TODO: because of the new dto with a relation to ingredients, this should be
+        //  refactored out and vm.recipe.ingredients should be used in stead
         vm.ingredients.observe(requireActivity(), {
             it?.let { updateIngredients() }
         })
@@ -116,7 +124,7 @@ class CurrentRecipeFragment : Fragment() {
         )
 
         val ingredientName = TextView(requireContext())
-        ingredientName.text = ingredient.ingredientName.toString()
+        ingredientName.text = ingredient.ingredientName
         ingredientName.layoutParams = TableRow.LayoutParams(
             TableRow.LayoutParams.WRAP_CONTENT,
             TableRow.LayoutParams.WRAP_CONTENT,
@@ -143,7 +151,7 @@ class CurrentRecipeFragment : Fragment() {
         )
 
         val unit = TextView(requireContext())
-        unit.text = ingredient.unit.toString()
+        unit.text = ingredient.unit
         unit.layoutParams = TableRow.LayoutParams(
             TableRow.LayoutParams.WRAP_CONTENT,
             TableRow.LayoutParams.WRAP_CONTENT,
@@ -156,8 +164,16 @@ class CurrentRecipeFragment : Fragment() {
         )
 
         val operation = TextView(requireContext())
-        operation.text = ingredient.operation.toString()
+        operation.text = ingredient.operation
         operation.layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.WRAP_CONTENT,
+            TableRow.LayoutParams.WRAP_CONTENT,
+        )
+
+        val calories = TextView(requireContext())
+        @SuppressLint("SetTextI18n")
+        calories.text = """(${ingredient.calories} cal)"""
+        calories.layoutParams = TableRow.LayoutParams(
             TableRow.LayoutParams.WRAP_CONTENT,
             TableRow.LayoutParams.WRAP_CONTENT,
         )
@@ -166,6 +182,7 @@ class CurrentRecipeFragment : Fragment() {
         ingredientTR.addView(unit)
         ingredientTR.addView(ingredientName)
         ingredientTR.addView(operation)
+        ingredientTR.addView(calories)
 
         ingredientsTable.addView(ingredientTR)
     }

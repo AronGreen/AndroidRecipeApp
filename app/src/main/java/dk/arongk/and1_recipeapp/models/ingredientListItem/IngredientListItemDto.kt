@@ -43,4 +43,4 @@ data class IngredientListItemDto(
     val operation: String,
     @ColumnInfo(name = "calories")
     val calories: String,
-    )
+)

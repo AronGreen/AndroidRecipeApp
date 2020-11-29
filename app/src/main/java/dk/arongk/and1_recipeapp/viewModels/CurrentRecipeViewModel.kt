@@ -7,16 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dk.arongk.and1_recipeapp.data.RecipeDatabase
 import dk.arongk.and1_recipeapp.data.repositories.IngredientListItemRepository
-import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
 import dk.arongk.and1_recipeapp.data.repositories.RecipeRepository
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemDto
+import dk.arongk.and1_recipeapp.models.recipe.RecipeWithIngredientsDto
 import java.util.*
 
 class CurrentRecipeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val recipeRepository: RecipeRepository
     private val ingredientListItemRepository: IngredientListItemRepository
-    var recipe: LiveData<RecipeDto>
+    var recipe: LiveData<RecipeWithIngredientsDto>
     var ingredients: LiveData<List<IngredientListItemDto>>
 
     init {

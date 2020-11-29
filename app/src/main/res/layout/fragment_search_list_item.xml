@@ -44,7 +44,7 @@
                 android:gravity="center|start"
                 android:paddingStart="8dp"
                 android:paddingEnd="4dp"
-                android:text="💪"
+                android:text="Work time"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
                 android:gravity="center|start"
                 android:paddingStart="8dp"
                 android:paddingEnd="4dp"
-                android:text="⏱"
+                android:text="Total time"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/sli_workTime"
@@ -100,7 +100,7 @@
                 android:gravity="center|start"
                 android:paddingStart="8dp"
                 android:paddingEnd="4dp"
-                android:text="👪"
+                android:text="Servings"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/sli_totalTime"
@@ -123,13 +123,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/sli_description"
+            android:id="@+id/sli_calories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="Description"
+            android:text="Calories"
             android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

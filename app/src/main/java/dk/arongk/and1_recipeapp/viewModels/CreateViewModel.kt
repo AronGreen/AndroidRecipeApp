@@ -47,16 +47,5 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
             }
             navController.navigate(R.id.action_createFragment_to_currentRecipeFragment)
         }
-//
-//        activity.runOnUiThread() {
-//            val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
-//            with (sharedPref.edit()) {
-//                putString(fragment.getString(R.string.current_recipe_id_string), id.toString())
-//                apply()
-//            }
-//            navController.navigate(R.id.action_createFragment_to_searchFragment)
-//        }
     }
-
-
 }

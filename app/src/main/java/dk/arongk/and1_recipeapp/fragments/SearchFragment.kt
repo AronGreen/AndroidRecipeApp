@@ -27,7 +27,6 @@ class SearchFragment : Fragment(), RecipeAdapter.OnListItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
         vm = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
@@ -36,7 +35,6 @@ class SearchFragment : Fragment(), RecipeAdapter.OnListItemClickListener {
 
         return view;
     }
-
 
     private fun initializeWidgets(view: View, vm : SearchViewModel) {
         recyclerView = view.findViewById(R.id.search_recyclerView)

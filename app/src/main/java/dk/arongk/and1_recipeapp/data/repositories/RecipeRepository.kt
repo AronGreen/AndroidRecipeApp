@@ -12,6 +12,7 @@ import dk.arongk.and1_recipeapp.models.ingredient.IngredientDto
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCreateModel
 import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
+import dk.arongk.and1_recipeapp.models.recipe.RecipeWithIngredientsDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,17 +31,10 @@ class RecipeRepository(
     private val analysisEndpoints: NutritionService =
         NutritionServiceBuilder.buildService(NutritionService::class.java)
 
-    fun get(id: UUID): LiveData<RecipeDto> {
+    fun get(id: UUID): LiveData<RecipeWithIngredientsDto> {
         return recipeDao.get(id)
     }
-
-    // Room executes all queries on a separate thread.
-    // Observed LiveData will notify the observer when the data has changed.
-//    fun getAll(): LiveData<List<RecipeDto>> {
-//        return recipeDao.getAll()
-//    }
-
-    val allRecipes: LiveData<List<RecipeDto>> = recipeDao.getAll()
+    val allRecipes: LiveData<List<RecipeWithIngredientsDto>> = recipeDao.getAll()
 
     //TODO: use updateRecipeModel
     suspend fun update(recipeDto: RecipeDto) {

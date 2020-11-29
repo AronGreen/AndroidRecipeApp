@@ -3,6 +3,7 @@ package dk.arongk.and1_recipeapp.data.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
+import dk.arongk.and1_recipeapp.models.recipe.RecipeWithIngredientsDto
 import java.util.*
 
 @Dao
@@ -12,10 +13,10 @@ interface RecipeDao {
     suspend fun insert(recipe: RecipeDto)
 
     @Query("SELECT * FROM recipes ORDER BY title DESC")
-    fun getAll(): LiveData<List<RecipeDto>>
+    fun getAll(): LiveData<List<RecipeWithIngredientsDto>>
 
     @Query("SELECT * FROM recipes WHERE id = :id")
-    fun get(id: UUID): LiveData<RecipeDto>
+    fun get(id: UUID): LiveData<RecipeWithIngredientsDto>
 
     @Update
     suspend fun update(recipe: RecipeDto)
