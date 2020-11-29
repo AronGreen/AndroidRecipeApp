@@ -1,60 +1,102 @@
 package dk.arongk.and1_recipeapp.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import dk.arongk.and1_recipeapp.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+// Authentication code adapted from: https://github.com/firebase/snippets-android/blob/686d8e61edab387ae35c3b6cb2d666b936d54f79/auth/app/src/main/java/com/google/firebase/quickstart/auth/kotlin/FirebaseUIActivity.kt#L21-L35
+// following: https://firebase.google.com/docs/auth/android/firebaseui?authuser=0
+private const val LOG_TAG = "MainFragment"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MainFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class MainFragment : Fragment(), View.OnClickListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var signInButton :Button
+    private var bottomNav : BottomNavigationView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
+
+        // If user is already authenticated, redirect
+        if (FirebaseAuth.getInstance().currentUser != null)
+            authenticationSuccess()
+        else
+            initializeWidgets(view)
+
+        return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+
+            if (resultCode == Activity.RESULT_OK) {
+                val user = FirebaseAuth.getInstance().currentUser
+                val username = user?.displayName ?: "Anonymous"
+                Toast.makeText(requireContext(), "Welcome $username", Toast.LENGTH_LONG).show()
+                authenticationSuccess()
+            } else {
+                if (response == null)
+                    Toast.makeText(requireContext(), "Sign in cancelled", Toast.LENGTH_LONG).show()
+                else
+                    Toast.makeText(requireContext(), response.error?.localizedMessage ?: "No error message found", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    override fun onClick(v: View?) {
+        Log.d(LOG_TAG, "Button clicked with id: " + v?.id)
+        when (v?.id) {
+            R.id.signInButton -> createSignInIntent()
+        }
+    }
+
+    private fun authenticationSuccess(){
+        bottomNav?.visibility = View.VISIBLE
+        findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+    }
+
+    private fun createSignInIntent() {
+//        Toast.makeText(requireContext(), "Signing in...", Toast.LENGTH_LONG).show()
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build())
+
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build(),
+            RC_SIGN_IN)
+    }
+
+    private fun initializeWidgets(view: View) { //TODO: verify that 'vm' parameter is unnecessary here and remove accordingly
+        signInButton = view.findViewById(R.id.signInButton)
+        signInButton.setOnClickListener(this)
+
+        // Remove navigation for this fragment, is reinstated on authentication success
+        bottomNav = activity?.findViewById(R.id.bottom_navigation)
+        bottomNav?.visibility = View.INVISIBLE
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        private const val RC_SIGN_IN = 99
     }
 }
