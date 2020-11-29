@@ -74,7 +74,7 @@ class RecipeRepository(
 
     private suspend fun getNutritionAnalysis(createModel: IngredientListItemCreateModel, dtoId : UUID ){
 
-        val call = analysisEndpoints.getNutritionAnalysis(createModel.toString())
+        val call = analysisEndpoints.getNutritionAnalysis(createModel.toApiRequestString())
 
         call.enqueue(object : Callback<NutritionAnalysisResponse> {
             override fun onResponse(call: Call<NutritionAnalysisResponse>, response: Response<NutritionAnalysisResponse>) {
@@ -84,6 +84,7 @@ class RecipeRepository(
                         ingredientListItemDao.updateCalories(dtoId, response.body()?.calories?.toString() ?: "")
                     }
                 }
+
             }
             override fun onFailure(call: Call<NutritionAnalysisResponse>, t: Throwable) {
                 Log.d(LOG_TAG, t.message ?: t.toString())

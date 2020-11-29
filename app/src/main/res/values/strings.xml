@@ -12,6 +12,11 @@
         <!-- Empty -->
         <item></item>
 
+        <!-- Relative sizes -->
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+
         <!-- Volumes -->
         <item>l</item>
         <item>dl</item>
@@ -24,10 +29,10 @@
         <item>kg</item>
         <item>lb</item>
 
-        <!-- Lengths-->
-        <item>m</item>
-        <item>cm</item>
-        <item>mm</item>
+        <!-- Lengths - not really useful-->
+<!--        <item>m</item>-->
+<!--        <item>cm</item>-->
+<!--        <item>mm</item>-->
 
     </string-array>
 

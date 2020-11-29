@@ -38,7 +38,7 @@ class SettingsFragment : Fragment(), View.OnClickListener {
             R.id.signOutButton -> signOut()
         }
     }
-    
+
     private fun signOut() {
         AuthUI.getInstance()
             .signOut(requireContext())

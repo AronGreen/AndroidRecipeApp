@@ -20,7 +20,15 @@ data class IngredientListItemCreateModel(
             calories = ""
         )
 
-    override fun toString(): String {
-        return "$quantity $unit $ingredientName"
+    fun toApiRequestString(): String{
+        var newQty = quantity
+        var newUnit = unit
+
+        when(unit){
+            "dl" -> {newQty = quantity / 10f; newUnit = "l"}
+            "ml" -> {newQty = quantity / 100f; newUnit = "l" }
+        }
+
+        return "$newQty $newUnit $ingredientName"
     }
 }
