@@ -39,7 +39,7 @@ abstract class RecipeDatabase : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.recipeDao())
+//                    populateDatabase(database.recipeDao())
                 }
             }
         }
@@ -52,8 +52,6 @@ abstract class RecipeDatabase : RoomDatabase() {
                 servings = 2
             }
             recipeDao.insert(createRecipeModel.toDto())
-            createRecipeModel.title = "Mirror eggs"
-            recipeDao.insert(createRecipeModel.copy(id = UUID.randomUUID()).toDto())
         }
     }
 

@@ -41,24 +41,29 @@ class CreateFragment : Fragment(), View.OnClickListener {
     private lateinit var vm: CreateViewModel
     private lateinit var imageUri: String
     private lateinit var currentPhotoPath: String
+
     // keeping track of programatically added EditText elements
-    private data class IngredientValues(val qty : EditText, val unit : Spinner, val name : EditText, val operation: EditText)
-    private val ingredientValues : MutableList<IngredientValues> = mutableListOf()
+    private data class IngredientValues(
+        val qty: EditText,
+        val unit: Spinner,
+        val name: EditText,
+        val operation: EditText
+    )
+
+    private val ingredientValues: MutableList<IngredientValues> = mutableListOf()
 
     // WIDGETS
     private lateinit var title: TextInputEditText
     private lateinit var workTime: TextInputEditText
     private lateinit var totalTime: TextInputEditText
     private lateinit var servings: TextInputEditText
-//    private lateinit var description: TextInputEditText
     private lateinit var instructions: TextInputEditText
     private lateinit var notes: TextInputEditText
     private lateinit var recipeImage: ImageView
     private lateinit var createButton: Button
     private lateinit var addImageButton: Button
     private lateinit var addIngredientButton: Button
-
-    private lateinit var ingredientsLinearLayout : LinearLayout
+    private lateinit var ingredientsLinearLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +73,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         val view = inflater.inflate(R.layout.fragment_create, container, false)
         vm = ViewModelProvider(requireActivity()).get(CreateViewModel::class.java)
         imageUri = vm.imageUri
-        initializeWidgets(view, vm)
+        initializeWidgets(view)
         initializeIngredientList()
         return view
     }
@@ -98,7 +103,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
     ) {
         when (requestCode) {
             PERMISSION_REQUEST_CODE -> {
-                if (allPermissionsGranted(grantResults) ) {
+                if (allPermissionsGranted(grantResults)) {
                     takePicture()
                     // TODO: or pick image from gallery
                 } else {
@@ -111,9 +116,8 @@ class CreateFragment : Fragment(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK)
-            when(requestCode){
+            when (requestCode) {
                 REQUEST_IMAGE_CAPTURE -> {
-                    //            val auxFile = File(currentPhotoPath)
                     recipeImage.visibility = View.VISIBLE
                     addImageButton.text = "Change image"
                     val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
@@ -122,13 +126,10 @@ class CreateFragment : Fragment(), View.OnClickListener {
                 }
                 // TODO: pick from gallery
             }
-
         // TODO: handle reject
-
     }
 
     private fun createRecipe() {
-        Log.i(LOG_TAG, "create recipe: " + title.text.toString())
         saveToViewModel()
 
         val model = RecipeCreateModel()
@@ -150,7 +151,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         if (checkPermission()) takePicture() else requestPermission()
 
     private fun allPermissionsGranted(grantResults: IntArray): Boolean {
-        return grantResults.isNotEmpty() && grantResults.all { x -> x ==  PackageManager.PERMISSION_GRANTED}
+        return grantResults.isNotEmpty() && grantResults.all { x -> x == PackageManager.PERMISSION_GRANTED }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -158,11 +159,12 @@ class CreateFragment : Fragment(), View.OnClickListener {
     private fun createFile(): File {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File? = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val storageDir: File? =
+            requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
@@ -199,24 +201,23 @@ class CreateFragment : Fragment(), View.OnClickListener {
     }
 
     private fun addIngredient() {
-        val element = IngredientListItemCreateModel(0f, "", "", "")
+        val element = IngredientListItemCreateModel()
         vm.ingredients.add(element)
         addIngredientListItem(element)
     }
 
-    private fun initializeWidgets(view: View, vm: CreateViewModel) { //TODO: verify that 'vm' parameter is unnecessary here and remove accordingly
+    private fun initializeWidgets(view: View) {
         title = view.findViewById(R.id.title)
         workTime = view.findViewById(R.id.workTime)
         totalTime = view.findViewById(R.id.totalTime)
         servings = view.findViewById(R.id.servings)
-//        description = view.findViewById(R.id.description)
         instructions = view.findViewById(R.id.instructions)
         notes = view.findViewById(R.id.notes)
         recipeImage = view.findViewById(R.id.recipeImage)
-        recipeImage.visibility =  if (vm.imageUri.isBlank())  View.GONE else View.VISIBLE
+        recipeImage.visibility = if (vm.imageUri.isBlank()) View.GONE else View.VISIBLE
         createButton = view.findViewById(R.id.createButton)
         addImageButton = view.findViewById(R.id.addImageButton)
-        addImageButton.text = if (vm.imageUri.isBlank())  addImageButton.text else "Change image"
+        addImageButton.text = if (vm.imageUri.isBlank()) addImageButton.text else "Change image"
         addIngredientButton = view.findViewById(R.id.addIngredientButton)
 
         createButton.setOnClickListener(this)
@@ -226,7 +227,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         ingredientsLinearLayout = view.findViewById(R.id.create_ingredientsLinearLayout)
     }
 
-    private fun initializeIngredientList(){
+    private fun initializeIngredientList() {
         vm.ingredients.forEach {
             addIngredientListItem(it)
         }
@@ -251,9 +252,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
             R.array.units_array,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
             unit.adapter = adapter
             unit.setSelection(adapter.getPosition(it.unit))
         }
@@ -293,13 +292,15 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.imageUri = imageUri
 
         vm.ingredients.clear()
-        ingredientValues.forEach {
-            vm.ingredients.add(IngredientListItemCreateModel(
-                quantity = it.qty.text.toString().toFloatOrNull() ?: 0f,
-                ingredientName = it.name.text.toString(),
-                unit = it.unit.selectedItem.toString(),
-                operation = it.operation.text.toString()
-            ))
+        ingredientValues.forEach { ingredientValue ->
+            vm.ingredients.add(
+                IngredientListItemCreateModel( ).also {model ->
+                    model.quantity = ingredientValue.qty.text.toString().toFloatOrNull() ?: 0f
+                    model.ingredientName = ingredientValue.name.text.toString()
+                    model.unit = ingredientValue.unit.selectedItem.toString()
+                    model.operation = ingredientValue.operation.text.toString()
+                }
+            )
         }
     }
 

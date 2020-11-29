@@ -11,14 +11,13 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import dk.arongk.and1_recipeapp.R
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCreateModel
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemDto
 import dk.arongk.and1_recipeapp.viewModels.CurrentRecipeViewModel
 import org.w3c.dom.Text
 import java.util.*
-
-private const val LOG_TAG = "CurrentRecipeFragment"
 
 class CurrentRecipeFragment : Fragment() {
     // PROPS
@@ -28,11 +27,11 @@ class CurrentRecipeFragment : Fragment() {
     private lateinit var image: ImageView
     private lateinit var title: TextView
     private lateinit var ingredientsTable: TableLayout
-    private lateinit var workTime : TextView
-    private lateinit var totalTime : TextView
-    private lateinit var servings : TextView
-    private lateinit var instructions : TextView
-    private lateinit var notes : TextView
+    private lateinit var workTime: TextView
+    private lateinit var totalTime: TextView
+    private lateinit var servings: TextView
+    private lateinit var instructions: TextView
+    private lateinit var notes: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,20 +40,28 @@ class CurrentRecipeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_current_recipe, container, false)
 
         vm = ViewModelProvider(this).get(CurrentRecipeViewModel::class.java)
-
-        initializeWidgets(view, vm)
-
-        return view
-    }
-
-    private fun initializeWidgets(view: View, vm: CurrentRecipeViewModel) {
         getRecipeId().apply {
-            // TODO: should redirect to either create or search if no recipe is currently selected
-            // Or the navigation button should be disabled if no recipe is currently selected
+            if(this == null){
+                Toast.makeText(requireContext(), "No recipe selected, please select one", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_currentRecipeFragment_to_searchFragment)
+            }
             this?.let { vm.updateRecipe(it) }
             Log.d("getRecipeId", vm.recipe.value.toString())
         }
 
+        initializeWidgets(view)
+
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        vm.recipe.removeObservers(requireActivity())
+        vm.ingredients.removeObservers(requireActivity())
+
+    }
+
+    private fun initializeWidgets(view: View) {
         vm.recipe.observe(requireActivity(), {
             it?.let { updateWidgets() }
         })
@@ -163,4 +170,7 @@ class CurrentRecipeFragment : Fragment() {
         ingredientsTable.addView(ingredientTR)
     }
 
+    companion object {
+        private const val LOG_TAG = "CurrentRecipeFragment"
+    }
 }

@@ -28,8 +28,8 @@
         android:label="fragment_create"
         tools:layout="@layout/fragment_create" >
         <action
-            android:id="@+id/action_createFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            android:id="@+id/action_createFragment_to_currentRecipeFragment"
+            app:destination="@id/currentRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_currentRecipeFragment_to_editRecipeFragment"
             app:destination="@id/editRecipeFragment" />
+        <action
+            android:id="@+id/action_currentRecipeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/editRecipeFragment"

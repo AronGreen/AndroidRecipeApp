@@ -13,6 +13,7 @@ import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCrea
 import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.data.repositories.RecipeRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class CreateViewModel(application: Application) : AndroidViewModel(application) {
@@ -20,7 +21,6 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
     var workTime: String = ""
     var totalTime: String = ""
     var servings: String = ""
-//    var description: String = ""
     var instructions: String = ""
     var notes: String = ""
     var imageUri: String = ""
@@ -32,21 +32,30 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
         val db = RecipeDatabase.getDatabase(application, viewModelScope)
         repository =
             RecipeRepository(db.recipeDao(), db.ingredientListItemDao(), db.ingredientDao())
-        ingredients = mutableListOf(IngredientListItemCreateModel(0f, "", "", ""))
+        ingredients = mutableListOf(IngredientListItemCreateModel())
     }
 
     fun insert(model: RecipeCreateModel, navController: NavController, activity: Activity, fragment: Fragment)  = viewModelScope.launch(Dispatchers.IO) {
         // TODO: validate inputs
         val id = repository.insert(model)
 
-        activity.runOnUiThread {
+        GlobalScope.launch(Dispatchers.Main) {
             val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
             with (sharedPref.edit()) {
                 putString(fragment.getString(R.string.current_recipe_id_string), id.toString())
                 apply()
             }
-            navController.navigate(R.id.action_createFragment_to_searchFragment)
+            navController.navigate(R.id.action_createFragment_to_currentRecipeFragment)
         }
+//
+//        activity.runOnUiThread() {
+//            val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
+//            with (sharedPref.edit()) {
+//                putString(fragment.getString(R.string.current_recipe_id_string), id.toString())
+//                apply()
+//            }
+//            navController.navigate(R.id.action_createFragment_to_searchFragment)
+//        }
     }
 
 

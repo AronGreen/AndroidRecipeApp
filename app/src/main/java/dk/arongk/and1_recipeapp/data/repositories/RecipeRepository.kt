@@ -27,7 +27,8 @@ class RecipeRepository(
     private val ingredientListItemDao: IngredientListItemDao,
     private val ingredientDao: IngredientDao
 ) {
-   private val analysisEndpoints: NutritionService = NutritionServiceBuilder.buildService(NutritionService::class.java)
+    private val analysisEndpoints: NutritionService =
+        NutritionServiceBuilder.buildService(NutritionService::class.java)
 
     fun get(id: UUID): LiveData<RecipeDto> {
         return recipeDao.get(id)
@@ -65,27 +66,36 @@ class RecipeRepository(
                     ingredientDao.insert(IngredientDto(ingredientId, it.ingredientName))
                 }
 
-                ingredientListItemDao.insert(it.toDto(UUID.randomUUID(), recipe.id, ingredientId))
-                getNutritionAnalysis(it, recipe.id)
+                ingredientListItemDao.insert(it.toDto(recipe.id, ingredientId))
+                getNutritionAnalysis(it)
             }
 
         return recipe.id
     }
 
-    private suspend fun getNutritionAnalysis(createModel: IngredientListItemCreateModel, dtoId : UUID ){
+    private suspend fun getNutritionAnalysis(
+        createModel: IngredientListItemCreateModel
+    ) {
 
         val call = analysisEndpoints.getNutritionAnalysis(createModel.toApiRequestString())
 
         call.enqueue(object : Callback<NutritionAnalysisResponse> {
-            override fun onResponse(call: Call<NutritionAnalysisResponse>, response: Response<NutritionAnalysisResponse>) {
+            override fun onResponse(
+                call: Call<NutritionAnalysisResponse>,
+                response: Response<NutritionAnalysisResponse>
+            ) {
                 Log.d(LOG_TAG, response.message())
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     GlobalScope.launch(Dispatchers.IO) {
-                        ingredientListItemDao.updateCalories(dtoId, response.body()?.calories?.toString() ?: "")
+                        ingredientListItemDao.updateCalories(
+                            createModel.id,
+                            response.body()?.calories?.toString() ?: ""
+                        )
                     }
                 }
 
             }
+
             override fun onFailure(call: Call<NutritionAnalysisResponse>, t: Throwable) {
                 Log.d(LOG_TAG, t.message ?: t.toString())
                 // TODO: save failed ingredients for later retry
