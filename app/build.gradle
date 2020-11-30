@@ -70,7 +70,7 @@ dependencies {
     // Material
     implementation 'com.google.android.material:material:1.2.1'
 
-    // Kotlin components
+    // Kotlin Coroutines
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
@@ -86,15 +86,27 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // Testing
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation "androidx.arch.core:core-testing:$core_testing_version"
+    // JUnit
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation "androidx.test.ext:junit:$junit_version"
+    //JUnit Rules
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+    //Espresso
     androidTestImplementation("androidx.test.espresso:espresso-core:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestImplementation "androidx.test.ext:junit:$junit_version"
+    //Mockito
+    testImplementation 'org.mockito:mockito-core:2.19.0'
+    //Robolectric
+    testImplementation 'org.robolectric:robolectric:4.4'
+    // Testing - Room
+    androidTestImplementation "androidx.arch.core:core-testing:$core_testing_version"
     // Testing - Room
     androidTestImplementation "androidx.room:room-testing:$room_version"
     // Testing - Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:2.3.1"
+    // Testing - Coroutines
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
 }

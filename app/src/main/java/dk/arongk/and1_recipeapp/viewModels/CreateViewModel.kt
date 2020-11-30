@@ -12,6 +12,8 @@ import dk.arongk.and1_recipeapp.data.RecipeDatabase
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCreateModel
 import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.data.repositories.RecipeRepository
+import dk.arongk.and1_recipeapp.util.DefaultDispatcherProvider
+import dk.arongk.and1_recipeapp.util.DispatcherProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
     var ingredients: MutableList<IngredientListItemCreateModel>;
 
     private val repository: RecipeRepository
+    var dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 
     init {
         val db = RecipeDatabase.getDatabase(application, viewModelScope)
@@ -39,7 +42,7 @@ class CreateViewModel(application: Application) : AndroidViewModel(application) 
         // TODO: validate inputs
         val id = repository.insert(model)
 
-        GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(dispatchers.main()) {
             val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
             with (sharedPref.edit()) {
                 putString(fragment.getString(R.string.current_recipe_id_string), id.toString())

@@ -13,6 +13,8 @@ import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCrea
 import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
 import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
 import dk.arongk.and1_recipeapp.models.recipe.RecipeWithIngredientsDto
+import dk.arongk.and1_recipeapp.util.DefaultDispatcherProvider
+import dk.arongk.and1_recipeapp.util.DispatcherProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,12 +29,16 @@ class RecipeRepository(
     private val ingredientListItemDao: IngredientListItemDao,
     private val ingredientDao: IngredientDao
 ) {
+
+    var dispatchers: DispatcherProvider = DefaultDispatcherProvider()
+
     private val analysisEndpoints: NutritionService =
         NutritionServiceBuilder.buildService(NutritionService::class.java)
 
     fun get(id: UUID): LiveData<RecipeWithIngredientsDto> {
         return recipeDao.get(id)
     }
+
     val allRecipes: LiveData<List<RecipeWithIngredientsDto>> = recipeDao.getAll()
 
     //TODO: use updateRecipeModel
@@ -79,7 +85,7 @@ class RecipeRepository(
             ) {
                 Log.d(LOG_TAG, response.message())
                 if (response.isSuccessful) {
-                    GlobalScope.launch(Dispatchers.IO) {
+                    GlobalScope.launch(dispatchers.io()) {
                         ingredientListItemDao.updateCalories(
                             createModel.id,
                             response.body()?.calories?.toString() ?: ""
