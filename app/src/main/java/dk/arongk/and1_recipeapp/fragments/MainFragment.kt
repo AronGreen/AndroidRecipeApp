@@ -19,7 +19,6 @@ import dk.arongk.and1_recipeapp.R
 
 // Authentication code adapted from: https://github.com/firebase/snippets-android/blob/686d8e61edab387ae35c3b6cb2d666b936d54f79/auth/app/src/main/java/com/google/firebase/quickstart/auth/kotlin/FirebaseUIActivity.kt#L21-L35
 // following: https://firebase.google.com/docs/auth/android/firebaseui?authuser=0
-private const val LOG_TAG = "MainFragment"
 
 class MainFragment : Fragment(), View.OnClickListener {
 
@@ -98,5 +97,6 @@ class MainFragment : Fragment(), View.OnClickListener {
 
     companion object {
         private const val RC_SIGN_IN = 99
+        private const val LOG_TAG = "MainFragment"
     }
 }

@@ -15,9 +15,6 @@ import com.firebase.ui.auth.AuthUI
 import dk.arongk.and1_recipeapp.R
 import dk.arongk.and1_recipeapp.viewModels.CreateViewModel
 
-
-private const val LOG_TAG = "SettingsFragment"
-
 class SettingsFragment : Fragment(), View.OnClickListener {
     private lateinit var signOutButton: Button
 
@@ -51,5 +48,9 @@ class SettingsFragment : Fragment(), View.OnClickListener {
     private fun initializeWidgets(view: View) { //TODO: verify that 'vm' parameter is unnecessary here and remove accordingly
         signOutButton = view.findViewById(R.id.signOutButton)
         signOutButton.setOnClickListener(this)
+    }
+
+    companion object{
+        private const val LOG_TAG = "SettingsFragment"
     }
 }

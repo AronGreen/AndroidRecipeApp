@@ -21,7 +21,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-private const val LOG_TAG = "RecipeRepository"
 
 class RecipeRepository(
     private val recipeDao: RecipeDao,
@@ -97,4 +96,7 @@ class RecipeRepository(
         })
     }
 
+    companion object{
+        private const val LOG_TAG = "RecipeRepository"
+    }
 }
