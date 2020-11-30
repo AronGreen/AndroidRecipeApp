@@ -35,24 +35,25 @@ abstract class RecipeDatabase : RoomDatabase() {
     private class RecipeDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
-        override fun onOpen(db: SupportSQLiteDatabase) {
-            super.onOpen(db)
-            INSTANCE?.let { database ->
-                scope.launch {
+        //NOTE: Uncomment this and modify if database population is necessary
+//        override fun onOpen(db: SupportSQLiteDatabase) {
+//            super.onOpen(db)
+//            INSTANCE?.let { database ->
+//                scope.launch {
 //                    populateDatabase(database.recipeDao())
-                }
-            }
-        }
+//                }
+//            }
+//        }
 
-        suspend fun populateDatabase(recipeDao: RecipeDao) {
-            val createRecipeModel = RecipeCreateModel().apply {
-                title = "Mashed potatoes"
-                workTime = 20
-                totalTime = 40
-                servings = 2
-            }
-            recipeDao.insert(createRecipeModel.toDto())
-        }
+//        suspend fun populateDatabase(recipeDao: RecipeDao) {
+//            val createRecipeModel = RecipeCreateModel().apply {
+//                title = "Mashed potatoes"
+//                workTime = 20
+//                totalTime = 40
+//                servings = 2
+//            }
+//            recipeDao.insert(createRecipeModel.toDto())
+//        }
     }
 
 
