@@ -12,9 +12,13 @@ interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(recipe: RecipeDto)
 
+    // wrap the complex model getters in transactions
+    // see: https://developer.android.com/reference/android/arch/persistence/room/Transaction.html
+    @Transaction
     @Query("SELECT * FROM recipes ORDER BY title DESC")
     fun getAll(): LiveData<List<RecipeWithIngredientsDto>>
 
+    @Transaction
     @Query("SELECT * FROM recipes WHERE id = :id")
     fun get(id: UUID): LiveData<RecipeWithIngredientsDto>
 
