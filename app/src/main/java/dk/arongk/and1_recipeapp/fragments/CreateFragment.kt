@@ -324,6 +324,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.notes = ""
         vm.imageUri = ""
         vm.ingredients.clear()
+        ingredientValues.clear()
         initializeIngredientList()
         restoreFromViewModel()
     }
