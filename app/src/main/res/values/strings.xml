@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">RecipeApp</string>
+    <string name="current_recipe">Current recipe</string>
+    <string name="create">Create</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="current_recipe_id_string">current_recipe_id_string</string>
+
+    <string-array name="units_array">
+        <!-- Empty -->
+        <item></item>
+
+        <!-- Relative sizes -->
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+
+        <!-- Volumes -->
+        <item>l</item>
+        <item>dl</item>
+        <item>ml</item>
+        <item>tbsp</item>
+        <item>tsp</item>
+
+        <!-- Weights-->
+        <item>g</item>
+        <item>kg</item>
+        <item>lb</item>
+
+        <!-- Lengths - not really useful-->
+<!--        <item>m</item>-->
+<!--        <item>cm</item>-->
+<!--        <item>mm</item>-->
+
+    </string-array>
+
+</resources>
