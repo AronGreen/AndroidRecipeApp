@@ -13,5 +13,5 @@ import com.google.gson.annotations.SerializedName
 class NutritionAnalysisResponse(
     @Expose
     @SerializedName("calories")
-    val calories : Int
+    val calories: Int
 )

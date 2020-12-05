@@ -22,8 +22,8 @@ import dk.arongk.and1_recipeapp.R
 
 class MainFragment : Fragment(), View.OnClickListener {
 
-    private lateinit var signInButton :Button
-    private var bottomNav : BottomNavigationView? = null
+    private lateinit var signInButton: Button
+    private var bottomNav: BottomNavigationView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,13 +49,24 @@ class MainFragment : Fragment(), View.OnClickListener {
             if (resultCode == Activity.RESULT_OK) {
                 val user = FirebaseAuth.getInstance().currentUser
                 val username = user?.displayName ?: "Anonymous"
-                Toast.makeText(requireContext(), "Welcome $username", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    """${getString(R.string.welcome)} $username""", Toast.LENGTH_LONG
+                ).show()
                 authenticationSuccess()
             } else {
                 if (response == null)
-                    Toast.makeText(requireContext(), "Sign in cancelled", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.sign_in_cancelled),
+                        Toast.LENGTH_LONG
+                    ).show()
                 else
-                    Toast.makeText(requireContext(), response.error?.localizedMessage ?: "No error message found", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        response.error?.localizedMessage ?: "No error message found",
+                        Toast.LENGTH_LONG
+                    ).show()
             }
         }
     }
@@ -67,7 +78,7 @@ class MainFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun authenticationSuccess(){
+    private fun authenticationSuccess() {
         bottomNav?.visibility = View.VISIBLE
         findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
     }
@@ -76,14 +87,16 @@ class MainFragment : Fragment(), View.OnClickListener {
 //        Toast.makeText(requireContext(), "Signing in...", Toast.LENGTH_LONG).show()
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build())
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
 
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .build(),
-            RC_SIGN_IN)
+            RC_SIGN_IN
+        )
     }
 
     private fun initializeWidgets(view: View) { //TODO: verify that 'vm' parameter is unnecessary here and remove accordingly

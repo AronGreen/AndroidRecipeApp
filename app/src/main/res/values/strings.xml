@@ -4,9 +4,29 @@
     <string name="create">Create</string>
     <string name="search">Search</string>
     <string name="settings">Settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="current_recipe_id_string">current_recipe_id_string</string>
+    <string name="picture_of_recipe">Picture of recipe</string>
+    <string name="add_picture">Add picture</string>
+    <string name="title">Title</string>
+    <string name="work_time_min">Work time (min)</string>
+    <string name="total_time_min">Total time (min)</string>
+    <string name="servings">Servings</string>
+    <string name="add_ingredient">Add ingredient</string>
+    <string name="instructions">Instructions</string>
+    <string name="notes">Notes</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="quantity">Quantity</string>
+    <string name="unit">Unit</string>
+    <string name="operation">Operation</string>
+    <string name="edit_recipe">edit recipe</string>
+    <string name="sign_in">Sign in</string>
+    <string name="calories">Calories</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_in_cancelled">Sign in cancelled</string>
+    <string name="welcome">Welcome</string>
+    <string name="no_recipe_selected">No recipe selected, please select one</string>
+    <string name="change_image">Change image</string>
+    <string name="quantity__short">Qty</string>
 
     <string-array name="units_array">
         <!-- Empty -->

@@ -20,7 +20,7 @@ interface IngredientListItemDao {
     suspend fun update(ingredientListItem: IngredientListItemDto)
 
     @Query("UPDATE ingredientListItems SET calories = :calories  WHERE id = :ingredientListItemId")
-    suspend fun updateCalories(ingredientListItemId: UUID, calories : String)
+    suspend fun updateCalories(ingredientListItemId: UUID, calories: String)
 
     @Delete
     suspend fun delete(ingredientListItem: IngredientListItemDto)

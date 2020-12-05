@@ -5,26 +5,24 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.sqlite.db.SupportSQLiteDatabase
 import dk.arongk.and1_recipeapp.data.dao.IngredientDao
 import dk.arongk.and1_recipeapp.data.dao.IngredientListItemDao
-import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
 import dk.arongk.and1_recipeapp.data.dao.RecipeDao
 import dk.arongk.and1_recipeapp.data.dao.TagDao
 import dk.arongk.and1_recipeapp.models.ingredient.IngredientDto
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemDto
-import dk.arongk.and1_recipeapp.models.recipe.RecipeCreateModel
+import dk.arongk.and1_recipeapp.models.recipe.RecipeDto
 import dk.arongk.and1_recipeapp.models.tag.TagDto
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import java.util.*
 
-@Database(entities = arrayOf(
-    RecipeDto::class,
-    IngredientListItemDto::class,
-    IngredientDto::class,
-    TagDto::class
-), version = 1, exportSchema = false) // TODO: look into exportSchema
+@Database(
+    entities = arrayOf(
+        RecipeDto::class,
+        IngredientListItemDto::class,
+        IngredientDto::class,
+        TagDto::class
+    ), version = 1, exportSchema = false
+) // TODO: look into exportSchema
 @TypeConverters(Converters::class)
 abstract class RecipeDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
@@ -73,7 +71,8 @@ abstract class RecipeDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     RecipeDatabase::class.java,
-                    "recipe_database")
+                    "recipe_database"
+                )
                     .addCallback(RecipeDatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
