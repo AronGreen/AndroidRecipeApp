@@ -1,7 +1,5 @@
 package dk.arongk.and1_recipeapp.fragments
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import dk.arongk.and1_recipeapp.R
-import dk.arongk.and1_recipeapp.viewModels.CreateViewModel
 
 class SettingsFragment : Fragment(), View.OnClickListener {
     private lateinit var signOutButton: Button
@@ -45,12 +42,12 @@ class SettingsFragment : Fragment(), View.OnClickListener {
             }
     }
 
-    private fun initializeWidgets(view: View) { //TODO: verify that 'vm' parameter is unnecessary here and remove accordingly
+    private fun initializeWidgets(view: View) {
         signOutButton = view.findViewById(R.id.signOutButton)
         signOutButton.setOnClickListener(this)
     }
 
-    companion object{
+    companion object {
         private const val LOG_TAG = "SettingsFragment"
     }
 }

@@ -9,8 +9,8 @@ import java.util.*
 data class IngredientDto(
     @PrimaryKey()
     @ColumnInfo(name = "id")
-    val id : UUID,
+    val id: UUID,
     @ColumnInfo(name = "name")
-    val name : String,
+    val name: String,
     // TODO: nutritional info
 )

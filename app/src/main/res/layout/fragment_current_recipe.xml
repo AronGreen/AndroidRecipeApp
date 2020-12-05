@@ -31,7 +31,7 @@
             android:layout_marginEnd="8dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="Title"
+            android:text="@string/title"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
                 android:gravity="center|start"
                 android:paddingStart="8dp"
                 android:paddingEnd="4dp"
-                android:text="Work time"
+                android:text="@string/work_time_min"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +95,7 @@
                 android:gravity="center|start"
                 android:paddingStart="8dp"
                 android:paddingEnd="4dp"
-                android:text="Total time"
+                android:text="@string/total_time_min"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/current_workTime"
@@ -124,7 +124,7 @@
                 android:gravity="center|start"
                 android:paddingStart="8dp"
                 android:paddingEnd="4dp"
-                android:text="Servings"
+                android:text="@string/servings"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/current_totalTime"
@@ -166,7 +166,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:text="Ingredients"
+            android:text="@string/servings"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -192,28 +192,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:text="Ingredient" />
+                    android:text="@string/ingredient" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Quantity" />
+                    android:text="@string/quantity" />
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Unit" />
+                    android:text="@string/unit" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Operation" />
+                    android:text="@string/operation" />
             </TableRow>
         </TableLayout>
 

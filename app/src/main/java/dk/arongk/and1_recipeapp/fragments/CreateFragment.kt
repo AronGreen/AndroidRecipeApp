@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -119,7 +118,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
             when (requestCode) {
                 REQUEST_IMAGE_CAPTURE -> {
                     recipeImage.visibility = View.VISIBLE
-                    addImageButton.text = "Change image"
+                    addImageButton.text = getString(R.string.change_image)
                     val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
                     recipeImage.setImageBitmap(bitmap)
                     vm.imageUri = currentPhotoPath
@@ -217,7 +216,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         recipeImage.visibility = if (vm.imageUri.isBlank()) View.GONE else View.VISIBLE
         createButton = view.findViewById(R.id.createButton)
         addImageButton = view.findViewById(R.id.addImageButton)
-        addImageButton.text = if (vm.imageUri.isBlank()) addImageButton.text else "Change image"
+        addImageButton.text = if (vm.imageUri.isBlank()) addImageButton.text else getString(R.string.change_image)
         addIngredientButton = view.findViewById(R.id.addIngredientButton)
 
         createButton.setOnClickListener(this)
@@ -242,7 +241,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         )
 
         val quantity = EditText(requireContext())
-        quantity.hint = "Qty"
+        quantity.hint = getString(R.string.quantity__short)
         quantity.setText(it.quantity.let { if (it == 0f) "" else it.toString() })
         quantity.inputType = EditorInfo.TYPE_CLASS_NUMBER
 
@@ -258,11 +257,11 @@ class CreateFragment : Fragment(), View.OnClickListener {
         }
 
         val name = EditText(requireContext())
-        name.hint = "Ingredient"
+        name.hint = getString(R.string.ingredient)
         name.setText(it.ingredientName)
 
         val operation = EditText(requireContext())
-        operation.hint = "Operation"
+        operation.hint = getString(R.string.operation)
         operation.setText(it.operation)
 
         ingredientLL.addView(quantity)
@@ -294,7 +293,7 @@ class CreateFragment : Fragment(), View.OnClickListener {
         vm.ingredients.clear()
         ingredientValues.forEach { ingredientValue ->
             vm.ingredients.add(
-                IngredientListItemCreateModel( ).also {model ->
+                IngredientListItemCreateModel().also { model ->
                     model.quantity = ingredientValue.qty.text.toString().toFloatOrNull() ?: 0f
                     model.ingredientName = ingredientValue.name.text.toString()
                     model.unit = ingredientValue.unit.selectedItem.toString()
@@ -331,7 +330,6 @@ class CreateFragment : Fragment(), View.OnClickListener {
 
     companion object {
         private const val LOG_TAG = "CREATE_FRAGMENT"
-        private const val IMAGE_PICK_ACTIVITY_REQUEST_CODE = 1 // TODO: remove
         private const val PERMISSION_REQUEST_CODE = 2
         private const val REQUEST_IMAGE_CAPTURE = 3
     }

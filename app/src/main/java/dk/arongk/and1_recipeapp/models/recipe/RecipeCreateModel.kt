@@ -1,10 +1,9 @@
 package dk.arongk.and1_recipeapp.models.recipe
 
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCreateModel
-import dk.arongk.and1_recipeapp.models.tag.TagDto
 import java.util.*
 
-data class RecipeCreateModel(val id :UUID = UUID.randomUUID()) {
+data class RecipeCreateModel(val id: UUID = UUID.randomUUID()) {
     var title: String = ""
     var workTime: Int = 0
     var totalTime: Int = 0

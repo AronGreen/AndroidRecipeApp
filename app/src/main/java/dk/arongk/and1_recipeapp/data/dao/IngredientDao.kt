@@ -10,7 +10,7 @@ interface IngredientDao {
     suspend fun insert(ingredientDto: IngredientDto): Long
 
     @Query("SELECT * FROM ingredients ORDER BY name DESC")
-     fun getAll(): LiveData<List<IngredientDto>>
+    fun getAll(): LiveData<List<IngredientDto>>
 
     @Query("SELECT * FROM ingredients WHERE id = :id")
     suspend fun get(id: Int): IngredientDto

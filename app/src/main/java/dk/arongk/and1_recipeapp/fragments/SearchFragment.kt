@@ -36,14 +36,14 @@ class SearchFragment : Fragment(), RecipeAdapter.OnListItemClickListener {
         return view;
     }
 
-    private fun initializeWidgets(view: View, vm : SearchViewModel) {
+    private fun initializeWidgets(view: View, vm: SearchViewModel) {
         recyclerView = view.findViewById(R.id.search_recyclerView)
 
         val adapter = RecipeAdapter(requireContext(), this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        vm.recipes.observe(requireActivity(), Observer {recipes ->
+        vm.recipes.observe(requireActivity(), Observer { recipes ->
             // Update the cached copy of the words in the adapter.
             recipes?.let { adapter.setData(it) }
         })
@@ -59,9 +59,9 @@ class SearchFragment : Fragment(), RecipeAdapter.OnListItemClickListener {
         findNavController().navigate(R.id.action_searchFragment_to_currentRecipeFragment)
     }
 
-    private fun setCurrentRecipeId(idString : String){
+    private fun setCurrentRecipeId(idString: String) {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
+        with(sharedPref.edit()) {
             putString(getString(R.string.current_recipe_id_string), idString)
             apply()
         }

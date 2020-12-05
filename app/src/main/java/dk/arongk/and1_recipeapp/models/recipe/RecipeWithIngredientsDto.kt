@@ -1,4 +1,5 @@
 package dk.arongk.and1_recipeapp.models.recipe
+
 import androidx.room.*
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemDto
 import java.util.*
@@ -7,7 +8,7 @@ import java.util.*
     tableName = "recipes",
     indices = [Index(value = ["id"])]
 )
-class RecipeWithIngredientsDto (
+class RecipeWithIngredientsDto(
     @PrimaryKey()
     @ColumnInfo(name = "id")
     val id: UUID,

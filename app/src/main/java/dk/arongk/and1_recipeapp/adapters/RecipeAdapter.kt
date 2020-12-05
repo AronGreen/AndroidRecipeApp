@@ -34,7 +34,7 @@ class RecipeAdapter(
         holder.workTime.text = recipes[position].workTime.toString()
         holder.totalTime.text = recipes[position].totalTime.toString()
         holder.servings.text = recipes[position].servings.toString()
-        val calories =  recipes[position].ingredients.sumBy {
+        val calories = recipes[position].ingredients.sumBy {
             it.calories.toIntOrNull() ?: 0
         }
         holder.calories.text = "$calories  calories"

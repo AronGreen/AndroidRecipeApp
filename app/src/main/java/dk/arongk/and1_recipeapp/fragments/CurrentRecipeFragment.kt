@@ -14,10 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import dk.arongk.and1_recipeapp.R
-import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemCreateModel
 import dk.arongk.and1_recipeapp.models.ingredientListItem.IngredientListItemDto
 import dk.arongk.and1_recipeapp.viewModels.CurrentRecipeViewModel
-import org.w3c.dom.Text
 import java.util.*
 
 class CurrentRecipeFragment : Fragment() {
@@ -45,7 +43,7 @@ class CurrentRecipeFragment : Fragment() {
             if (this == null) {
                 Toast.makeText(
                     requireContext(),
-                    "No recipe selected, please select one",
+                    getString(R.string.no_recipe_selected),
                     Toast.LENGTH_LONG
                 ).show()
                 findNavController().navigate(R.id.action_currentRecipeFragment_to_searchFragment)
